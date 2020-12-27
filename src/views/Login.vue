@@ -81,7 +81,8 @@ export default {
                 if (valid) {
                     this.postKeyValueRequest("/login", this.loginForm).then(resp=>{
                         if (resp){
-                            alert(JSON.stringify(resp));
+                            // alert(JSON.stringify(resp));
+                            this.$router.push("/index")
                         }
                     })
                 } else {

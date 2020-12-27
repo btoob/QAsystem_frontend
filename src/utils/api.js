@@ -33,7 +33,7 @@ error=>{
         
 })
 
-
+//前端请求接口封装
 let base='';
 
 export const postKeyValueRequest=(url, params)=>{
