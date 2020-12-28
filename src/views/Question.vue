@@ -30,22 +30,14 @@
             </el-header>
             <el-container>
                 <el-main class="indexMain">
-                    <i class="el-icon-files" style="margin-bottom: 15px" >   发现</i>
-                    <el-divider></el-divider>
-                    <el-row v-for="(question, index) in questions" :key="index">
-                        <div style=" display: flex;align-items: flex-start">
-                            <el-avatar size="large" shape="square" src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"></el-avatar>
-                            <div style="margin-left: 10px">
-                                <el-link @click="goDetail(question)" type="primary">{{ question.title }}</el-link> <br>
-    <!--                            <span>{{question.description}}</span> <br>-->
-                                <span class="text_desc">
+                    <div style="margin-left: 10px">
+                        <i class="el-icon-files" style="margin-bottom: 15px" >   {{question.title}}</i> <br>
+                        <span class="text_desc">
                                     <span>{{question.commentCount}}</span> 个回复 · <span>{{question.viewCount}}</span> 次浏览 · <span>{{question.updateTime}}</span>
                                 </span>
-                            </div>
-                        </div>
-                        <el-divider style="margin-top: 3px"></el-divider>
-                    </el-row>
-
+                    </div>
+                    <el-divider></el-divider>
+                    <span>{{question.description}}</span>
                 </el-main>
                 <el-aside width="300px" class="indexAside">
                     <h3>热门标签</h3>
@@ -56,36 +48,20 @@
 </template>
 
 <script>
-    export default {
-        name: "Index",
-        data(){
-            return{
-                questions:[]
-            }
-        },
-        mounted() {
-            this.initQuestions()
-        },
-        methods:{
-            initQuestions(){
-                this.getRequest("question/").then(resp=>{
-                    if (resp){
-                        // alert(JSON.stringify(resp))
-                        this.questions=resp
-                    }
-                })
-            },
-            goDetail(question){
-                this.getRequest("question/"+question.id).then(resp=>{
-                    if (resp){
-                        console.log(resp)
-                        window.sessionStorage.setItem("question", JSON.stringify(resp));
-                        this.$router.push("/question")
-                    }
-                })
-            }
+export default {
+    name: "Question",
+    data(){
+        return{
+            question:JSON.parse(window.sessionStorage.getItem("question"))
         }
+    },
+    mounted() {
+
+    },
+    methods:{
+
     }
+}
 </script>
 
 <style>

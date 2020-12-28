@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Login from "@/views/Login";
 import Index from "@/views/Index";
+import Question from "@/views/Question";
 Vue.use(VueRouter)
 
 const routes = [
@@ -14,7 +15,12 @@ const routes = [
     path: '/index',
     name: 'Index',
     component: Index
-  }
+  },
+  {
+    path: '/question',
+    name: 'Question',
+    component: Question
+  },
 
 ]
 

@@ -67,8 +67,8 @@ export default {
                 password:[{required:true, message:"请输入密码！", trigger:"blur"}],
             },
             loginForm:{
-                username:"",
-                password:"",
+                username:"于禁",
+                password:"123",
             },
         }
     },
