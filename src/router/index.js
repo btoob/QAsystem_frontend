@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Login from "@/views/Login";
 import Index from "@/views/Index";
 import Question from "@/views/Question";
+import Publish from "@/views/Publish";
 Vue.use(VueRouter)
 
 const routes = [
@@ -20,6 +21,11 @@ const routes = [
     path: '/question',
     name: 'Question',
     component: Question
+  },
+  {
+    path: '/publish',
+    name: 'Publish',
+    component: Publish
   },
 
 ]

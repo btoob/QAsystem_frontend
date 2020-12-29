@@ -82,6 +82,8 @@ export default {
                     this.postKeyValueRequest("/login", this.loginForm).then(resp=>{
                         if (resp){
                             // alert(JSON.stringify(resp));
+                            console.log(resp)
+                            window.sessionStorage.setItem("user", JSON.stringify(resp.object));
                             this.$router.push("/index")
                         }
                     })

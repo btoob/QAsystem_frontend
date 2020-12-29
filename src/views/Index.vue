@@ -12,12 +12,13 @@
                     </div>
                 </div>
                 <div>
+                    <router-link to="/publish">
                     <el-button icon="el-icon-edit" type="text"
                                style="color: #000000;width: auto;height: auto;margin-right: 25px"
-                               size="normal" @click="goChat">提问</el-button>
+                               size="normal" @click="goChat">发布</el-button></router-link>
                     <el-dropdown class="userInfo" @command="commandHandler" trigger="click" style="cursor: pointer">
                         <span class="el-dropdown-link">
-                        用户名<i class="el-icon-arrow-down el-icon--right"></i>
+                        {{ user.name}}<i class="el-icon-arrow-down el-icon--right"></i>
                         </span>
                         <el-dropdown-menu slot="dropdown">
                             <el-dropdown-item command="userinfo">个人中心</el-dropdown-item>
@@ -60,7 +61,8 @@
         name: "Index",
         data(){
             return{
-                questions:[]
+                questions:[],
+                user:JSON.parse(window.sessionStorage.getItem("user"))
             }
         },
         mounted() {
