@@ -19,6 +19,7 @@ Vue.prototype.postRequest=postRequest;
 
 
 Vue.config.productionTip = false
+Vue.config.devtools = true
 Vue.use(ElementUI);
 new Vue({
   router,

@@ -38,7 +38,6 @@
                             <el-avatar size="large" shape="square" src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"></el-avatar>
                             <div style="margin-left: 10px">
                                 <el-link @click="goDetail(question)" type="primary">{{ question.title }}</el-link> <br>
-    <!--                            <span>{{question.description}}</span> <br>-->
                                 <span class="text_desc">
                                     <span>{{question.commentCount}}</span> 个回复 · <span>{{question.viewCount}}</span> 次浏览 · <span>{{question.updateTime}}</span>
                                 </span>

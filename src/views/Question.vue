@@ -40,7 +40,15 @@
                     <span>{{question.description}}</span>
                 </el-main>
                 <el-aside width="300px" class="indexAside">
-                    <h3>热门标签</h3>
+                    <div>
+                    <div style="margin-top: 10px;margin-bottom: 5px">发起人</div>
+                    <div style=" display: flex;align-items: flex-start">
+                        <el-avatar size="large" shape="square" src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"></el-avatar>
+                        <div style="margin-left: 10px">
+                            <span style="font-family: 黑体,serif;font-size:15px ">{{ user.name }}</span> <br>
+                        </div>
+                    </div>
+                    </div>
                 </el-aside>
             </el-container>
         </el-container>
