@@ -3,7 +3,9 @@
         <el-container>
             <el-header class="indexHeader" height="50px">
                 <div style="display: flex; align-items: baseline">
-                    <div class="title">问答社区</div>
+                    <router-link to="/index" style="text-decoration: none">
+                        <div class="title">问答社区</div>
+                    </router-link>
                     <div style="display: flex; align-items: baseline;
                     vertical-align: mathematical;">
                         <el-input v-model="input" placeholder="" size="medium"
@@ -84,6 +86,23 @@
                         this.$router.push("/question")
                     }
                 })
+            },
+            commandHandler(cmd) {
+                if (cmd === 'logout') {
+                    this.$confirm('此操作将注销登录, 是否继续?', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    }).then(() => {
+                        window.sessionStorage.removeItem("user")
+                        this.$router.replace("/");
+                    }).catch(() => {
+                        this.$message({
+                            type: 'info',
+                            message: '已取消操作'
+                        });
+                    });
+                }
             }
         }
     }

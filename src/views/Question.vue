@@ -3,7 +3,9 @@
         <el-container>
             <el-header class="indexHeader" height="50px">
                 <div style="display: flex; align-items: baseline">
-                    <div class="title">问答社区</div>
+                    <router-link to="/index" style="text-decoration: none">
+                        <div class="title">问答社区</div>
+                    </router-link>
                     <div style="display: flex; align-items: baseline;
                     vertical-align: mathematical;">
                         <el-input v-model="input" placeholder="" size="medium"
@@ -12,9 +14,10 @@
                     </div>
                 </div>
                 <div>
+                    <router-link to="/publish">
                     <el-button icon="el-icon-edit" type="text"
                                style="color: #000000;width: auto;height: auto;margin-right: 25px"
-                               size="normal" @click="goPublish">发布</el-button>
+                               size="normal" @click="goPublish">发布</el-button></router-link>
                     <el-dropdown class="userInfo" @command="commandHandler" trigger="click" style="cursor: pointer">
                         <span class="el-dropdown-link">
                         {{user.name}}<i class="el-icon-arrow-down el-icon--right"></i>
@@ -68,7 +71,23 @@ export default {
 
     },
     methods:{
-
+    commandHandler(cmd) {
+        if (cmd === 'logout') {
+            this.$confirm('此操作将注销登录, 是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                window.sessionStorage.removeItem("user")
+                this.$router.replace("/");
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消操作'
+                });
+            });
+        }
+    }
     }
 }
 </script>

@@ -10,22 +10,35 @@ const routes = [
   {
     path: '/',
     name: 'Login',
-    component: Login
+    component: Login,
+    meta:{
+      title:'登录页面'
+    }
   },
   {
     path: '/index',
     name: 'Index',
-    component: Index
+    component: Index,
+    meta:{
+      title:'首页'
+    }
   },
   {
     path: '/question',
     name: 'Question',
-    component: Question
+    component: Question,
+    meta:{
+      //页面的标题
+      title:'问题详情页'
+    }
   },
   {
     path: '/publish',
     name: 'Publish',
-    component: Publish
+    component: Publish,
+    meta:{
+      title:'问题发布页'
+    }
   },
 
 ]

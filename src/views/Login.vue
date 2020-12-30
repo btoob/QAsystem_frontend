@@ -37,20 +37,28 @@
             </div>
             <div class="form sign-up">
                 <h2>立即注册</h2>
-                <label>
-                    <span>用户名</span>
-                    <el-input type="text" />
-                </label>
-                <label>
-                    <span>邮箱</span>
-                    <el-input type="email" />
-                </label>
-                <label>
-                    <span>密码</span>
-                    <el-input type="password" />
-                </label>
-                <button type="button" class="submit">注 册</button>
-                <button type="button" class="fb-btn">使用 <span>facebook</span> 帐号注册</button>
+                <el-form :model="signForm" ref="signForm" :rules="rules" >
+                    <label>
+                        <span>用户名</span>
+                        <el-form-item prop="username">
+                            <el-input type="text" v-model="signForm.name" />
+                        </el-form-item>
+                    </label>
+                    <label>
+                        <span>邮箱</span>
+                        <el-form-item prop="email">
+                            <el-input type="text" v-model="signForm.email" />
+                        </el-form-item>
+                    </label>
+                    <label>
+                        <span>密码</span>
+                        <el-form-item prop="password">
+                            <el-input type="text" v-model="signForm.password" />
+                        </el-form-item>
+                    </label>
+                    <button type="button" class="submit" @click="submitRegistry">注 册</button>
+                    <button type="button" class="fb-btn">使用 <span>facebook</span> 帐号注册</button>
+                </el-form>
             </div>
         </div>
     </div>
@@ -63,13 +71,25 @@ export default {
     data(){
         return{
             rules:{
-                username:[{required:true, message:"请输入用户名！", trigger:"blur"}],
+                username:[{required:true, message:"请输入用户名！", trigger:"blur"},
+                    { min: 2, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }],
+                email: [{required: true, message: '请输入邮箱地址', trigger: 'blur'}, {
+                    type: 'email',
+                    message: '邮箱格式不正确',
+                    trigger: 'blur'
+                }],
                 password:[{required:true, message:"请输入密码！", trigger:"blur"}],
             },
             loginForm:{
                 username:"于禁",
                 password:"123",
             },
+            signForm:{
+                name:"小明",
+                email:'123@qq.com',
+                password:'123',
+            }
+
         }
     },
     methods:{
@@ -92,6 +112,13 @@ export default {
                     return false;
                 }
             });
+        },
+        submitRegistry(){
+            this.postRequest("/signUp", this.signForm).then(resp=>{
+                if (resp){
+                    this.$refs.content.classList.toggle('s--signup')
+                }
+            })
         }
     }
 }
