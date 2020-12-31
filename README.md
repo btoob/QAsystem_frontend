@@ -19,7 +19,8 @@ npm run test
 
 ### BUG
 ```
-不能在同一个浏览器同时开两个index页面
+> 不能在同一个浏览器同时开两个index页面
+> 每次导入element ui样式总是不对，需要自己调整
 ```
 
 ### Customize configuration

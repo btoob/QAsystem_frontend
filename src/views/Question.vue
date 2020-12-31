@@ -97,6 +97,7 @@ export default {
                     type: 'warning'
                 }).then(() => {
                     window.sessionStorage.removeItem("user")
+                    window.sessionStorage.removeItem("question");
                     this.$router.replace("/");
                 }).catch(() => {
                     this.$message({

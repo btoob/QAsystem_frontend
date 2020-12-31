@@ -47,6 +47,18 @@
                         </div>
                         <el-divider style="margin-top: 3px"></el-divider>
                     </el-row>
+                    <div class="page">
+                        <el-pagination
+                            class="msg-pagination-container"
+                            background
+                            :page-sizes="[5, 10, 15]"
+                            :page-size="5"
+                            @current-change="handleCurrentChange"
+                            @size-change="handleSizeChange"
+                            layout="sizes, prev, pager, next, jumper, ->, total, slot"
+                            :total="total">
+                        </el-pagination>
+                    </div>
 
                 </el-main>
                 <el-aside width="300px" class="indexAside">
@@ -63,18 +75,30 @@
         data(){
             return{
                 questions:[],
-                user:JSON.parse(window.sessionStorage.getItem("user"))
+                user:JSON.parse(window.sessionStorage.getItem("user")),
+                total:'50',
+                page:'1',
+                size:'5',
             }
         },
         mounted() {
             this.initQuestions()
         },
         methods:{
+            handleCurrentChange(currentPage){
+                this.page=currentPage;
+                this.initQuestions();
+            },
+            handleSizeChange(currentSize){
+                this.size = currentSize;
+                this.initQuestions();
+            },
             initQuestions(){
-                this.getRequest("question/").then(resp=>{
+                this.getRequest("question/?page="+this.page+"&size="+this.size).then(resp=>{
                     if (resp){
                         // alert(JSON.stringify(resp))
-                        this.questions=resp
+                        this.questions=resp.data;
+                        this.total=resp.total;
                     }
                 })
             },
@@ -94,7 +118,8 @@
                         cancelButtonText: '取消',
                         type: 'warning'
                     }).then(() => {
-                        window.sessionStorage.removeItem("user")
+                        window.sessionStorage.removeItem("user");
+                        window.sessionStorage.removeItem("question");
                         this.$router.replace("/");
                     }).catch(() => {
                         this.$message({
@@ -158,5 +183,23 @@
     height: 1px;
     width: 80%;
     margin: 12px 0;
+}
+.msg-pagination-container{
+    display: flex;
+    justify-content: flex-end;
+}
+/deep/ .el-pagination .btn-next {
+
+    width: 10px;
+}
+/deep/ .el-pagination .btn-prev{
+    width: 10px;
+}
+/deep/ .el-pagination__total{
+    margin-right: 0;
+    margin-left: 5px;
+}
+/deep/ .msg-pagination-container .el-input__inner{
+    margin-top: 0;
 }
 </style>
