@@ -14,10 +14,10 @@
                     </div>
                 </div>
                 <div>
-                    <router-link to="/publish">
+
                     <el-button icon="el-icon-edit" type="text"
                                style="color: #000000;width: auto;height: auto;margin-right: 25px"
-                               size="normal" @click="goPublish">发布</el-button></router-link>
+                               size="normal" @click="goPublish">发布</el-button>
                     <el-dropdown class="userInfo" @command="commandHandler" trigger="click" style="cursor: pointer">
                         <span class="el-dropdown-link">
                         {{user.name}}<i class="el-icon-arrow-down el-icon--right"></i>
@@ -40,7 +40,12 @@
                                 </span>
                     </div>
                     <el-divider></el-divider>
-                    <span>{{question.description}}</span>
+                    <span style="margin-left: 25px">{{question.description}}</span>
+                    <el-divider></el-divider>
+                    <router-link to="/publish" v-if="question.userId===user.id">
+                        <el-button icon="el-icon-edit-outline" type="text"
+                                   style="color: #000000;width: auto;height: auto;margin-left: 25px;font-family: 黑体,serif ;color: gray;"
+                                   size="normal" @click="goEdit">编辑</el-button></router-link>
                 </el-main>
                 <el-aside width="300px" class="indexAside">
                     <div>
@@ -64,30 +69,43 @@ export default {
     data(){
         return{
             question:JSON.parse(window.sessionStorage.getItem("question")),
-            user:JSON.parse(window.sessionStorage.getItem("user"))
+            user:JSON.parse(window.sessionStorage.getItem("user")),
+            canEdit:false,
         }
     },
     mounted() {
-
+        if (this.question.userId===this.user.id){
+            this.canEdit=true;
+        }
+    },
+    beforeRouteLeave(to, from, next){
+        if (this.canEdit===false && window.sessionStorage.getItem("question")){
+            window.sessionStorage.removeItem("question")
+        }
+        next()
     },
     methods:{
-    commandHandler(cmd) {
-        if (cmd === 'logout') {
-            this.$confirm('此操作将注销登录, 是否继续?', '提示', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                type: 'warning'
-            }).then(() => {
-                window.sessionStorage.removeItem("user")
-                this.$router.replace("/");
-            }).catch(() => {
-                this.$message({
-                    type: 'info',
-                    message: '已取消操作'
+        goPublish(){
+            window.sessionStorage.removeItem("question")
+            this.$router.replace("/publish")
+        },
+        commandHandler(cmd) {
+            if (cmd === 'logout') {
+                this.$confirm('此操作将注销登录, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    window.sessionStorage.removeItem("user")
+                    this.$router.replace("/");
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消操作'
+                    });
                 });
-            });
+            }
         }
-    }
     }
 }
 </script>

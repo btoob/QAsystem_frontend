@@ -17,9 +17,9 @@ npm run serve
 npm run test
 ```
 
-### Lints and fixes files
+### BUG
 ```
-npm run lint
+不能在同一个浏览器同时开两个index页面
 ```
 
 ### Customize configuration
