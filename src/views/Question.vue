@@ -31,12 +31,12 @@
                 </div>
 
             </el-header>
-            <el-container>
+            <el-container class="indexContainer">
                 <el-main class="indexMain">
                     <div style="margin-left: 10px">
                         <i class="el-icon-files" style="margin-bottom: 15px" >   {{question.title}}</i> <br>
                         <span class="text_desc">
-                                    <span>{{question.commentCount}}</span> 个回复 · <span>{{question.viewCount}}</span> 次浏览 · <span>{{question.updateTime}}</span>
+                                    <span>{{question.commentCount}}</span> 个回复 | <span>{{question.viewCount}}</span> 次浏览 | 发布时间: <span>{{question.updateTime}}</span>
                                 </span>
                     </div>
                     <el-divider></el-divider>
@@ -44,19 +44,60 @@
                     <el-divider></el-divider>
                     <router-link to="/publish" v-if="question.userId===user.id">
                         <el-button icon="el-icon-edit-outline" type="text"
-                                   style="color: #000000;width: auto;height: auto;margin-left: 25px;font-family: 黑体,serif ;color: gray;"
+                                   style="padding-top: 0;padding-bottom: 0; color: #000000;width: auto;height: auto;margin-left: 25px;font-family: 黑体,serif ;color: gray;"
                                    size="normal" @click="goEdit">编辑</el-button></router-link>
-                </el-main>
-                <el-aside width="300px" class="indexAside">
+                    <el-divider></el-divider>
                     <div>
-                    <div style="margin-top: 10px;margin-bottom: 5px">发起人</div>
+                        <h4 class="comCount">{{question.commentCount}}个回复</h4>
+                        <el-divider></el-divider>
+                        <el-row v-for="(comment, index) in comments" :key="index">
+                            <div style=" display: flex;align-items: flex-start">
+                                <el-avatar size="large" shape="square" src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"></el-avatar>
+                                <div style="margin-left: 15px">
+                                    <span style="font-size: 15px;font-family: 黑体,serif ;color: gray;">{{comment.commentator}}</span>
+                                    <div>
+                                        <span>{{comment.content}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="margin-top: 10px;margin-left: 50px;font-size: 20px;font-family: 黑体,serif ;color: gray;" class="text_desc">
+                                <div class="el-icon-check" style="margin-right: 10px;" @click="doAgree">  {{ agree }}</div>
+                                <div class="el-icon-close" style="margin-right: 10px" @click="doDisagree">  {{disagree}}</div>
+                                <div class="el-icon-chat-dot-square" >  {{commentCount}}</div>
+                            </div>
+                            <el-divider style="margin-top: 3px"></el-divider>
+                        </el-row>
+                    </div>
+                    <h4 class="comCount">提交回复</h4>
+                    <el-divider></el-divider>
                     <div style=" display: flex;align-items: flex-start">
                         <el-avatar size="large" shape="square" src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"></el-avatar>
-                        <div style="margin-left: 10px">
+                        <div style="margin-left: 10px;">
                             <span style="font-family: 黑体,serif;font-size:15px ">{{ user.name }}</span> <br>
                         </div>
                     </div>
+                    <el-input style="margin-top: 10px"
+                        type="textarea"
+                        :rows="5"
+                        placeholder="请输入内容"
+                        v-model="textarea">
+                    </el-input>
+                    <div style="display: flex;justify-content: flex-end;margin-top: 10px" >
+                        <el-button type="primary" style="width: auto;height: auto" @click="doPublish">提交</el-button>
                     </div>
+
+                </el-main>
+                <el-aside width="300px" class="indexAside">
+                    <div>
+                        <div style="margin-top: 10px;margin-bottom: 5px">发起人</div>
+                        <div style=" display: flex;align-items: flex-start">
+                            <el-avatar size="large" shape="square" src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"></el-avatar>
+                            <div style="margin-left: 10px;">
+                                <span style="font-family: 黑体,serif;font-size:15px ">{{ user.name }}</span> <br>
+                            </div>
+                        </div>
+                    </div>
+
                 </el-aside>
             </el-container>
         </el-container>
@@ -71,12 +112,17 @@ export default {
             question:JSON.parse(window.sessionStorage.getItem("question")),
             user:JSON.parse(window.sessionStorage.getItem("user")),
             canEdit:false,
+            comments:[],
+            agree:0,
+            disagree:0,
+            commentCount:0,
         }
     },
     mounted() {
         if (this.question.userId===this.user.id){
             this.canEdit=true;
         }
+        this.initComments();
     },
     beforeRouteLeave(to, from, next){
         if (this.canEdit===false && window.sessionStorage.getItem("question")){
@@ -85,6 +131,17 @@ export default {
         next()
     },
     methods:{
+        doAgree(){
+          this.agree+=1
+        },
+        doDisagree(){this.disagree+=1},
+        initComments(){
+            this.getRequest("/comment/").then(resp=>{
+                if (resp){
+                    this.comments=resp;
+                }
+            })
+        },
         goPublish(){
             window.sessionStorage.removeItem("question")
             this.$router.replace("/publish")
@@ -112,47 +169,6 @@ export default {
 </script>
 
 <style>
-.indexAside{
-    margin-left: 20px;
-    background-color: white;
-    box-sizing: border-box;
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-}
-
-.indexMain{
-    background-color: white;
-    margin-left: 25px;
-    box-sizing: border-box;
-}
-.indexHeader {
-    background-color: white;
-    margin-top: 1px;
-    margin-bottom: 25px;
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    box-sizing: border-box;
-    box-shadow: 0 0 25px #cac6c6;
-}
-.indexHeader .title {
-    font-size: 20px;
-    font-family: 黑体,serif ;
-    color: gray;
-    margin-right: 20px;
-}
-.el-icon-files{
-    font-size: 25px;
-    font-family: 黑体,serif ;
-    color: gray;
-    border-bottom: #1b6d85;
-}
-.text_desc{
-    font-size: 10px;
-    font-family: 黑体,serif ;
-    color: gray;
-}
 
 </style>
 <style scoped>
@@ -161,5 +177,11 @@ export default {
     height: 1px;
     width: 80%;
     margin: 12px 0;
+}
+.comCount{
+    font-size: 20px;
+    font-family: 黑体,serif ;
+    color: #0f0f0f;
+    border-bottom: #1b6d85;
 }
 </style>

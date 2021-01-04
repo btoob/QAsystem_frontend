@@ -31,7 +31,7 @@
                 </div>
 
             </el-header>
-            <el-container>
+            <el-container class="indexContainer">
                 <el-main class="indexMain">
                     <i class="el-icon-files" style="margin-bottom: 15px" >   发现</i>
                     <el-divider></el-divider>
@@ -52,7 +52,7 @@
                             class="msg-pagination-container"
                             background
                             :page-sizes="[5, 10, 15]"
-                            :page-size="5"
+                            :page-size="10"
                             @current-change="handleCurrentChange"
                             @size-change="handleSizeChange"
                             layout="sizes, prev, pager, next, jumper, ->, total, slot"
@@ -78,7 +78,7 @@
                 user:JSON.parse(window.sessionStorage.getItem("user")),
                 total:'50',
                 page:'1',
-                size:'5',
+                size:'10',
             }
         },
         mounted() {
@@ -134,8 +134,12 @@
 </script>
 
 <style>
+.indexContainer{
+    margin-left: 150px;
+    margin-right: 150px;
+}
 .indexAside{
-    margin-left: 20px;
+    margin-left: 1px;
     background-color: white;
     box-sizing: border-box;
     display: flex;
@@ -145,7 +149,6 @@
 
 .indexMain{
     background-color: white;
-    margin-left: 25px;
     box-sizing: border-box;
 }
 .indexHeader {
@@ -176,20 +179,21 @@
     color: gray;
 }
 
+
 </style>
 <style scoped>
 .el-divider--horizontal {
     display: block;
     height: 1px;
-    width: 80%;
+    width: 90%;
     margin: 12px 0;
 }
 .msg-pagination-container{
     display: flex;
     justify-content: flex-end;
 }
+/*加deep才可以修改原生样式*/
 /deep/ .el-pagination .btn-next {
-
     width: 10px;
 }
 /deep/ .el-pagination .btn-prev{
@@ -199,6 +203,7 @@
     margin-right: 0;
     margin-left: 5px;
 }
+/*加deep才可以修改原生样式*/
 /deep/ .msg-pagination-container .el-input__inner{
     margin-top: 0;
 }
