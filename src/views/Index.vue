@@ -37,7 +37,11 @@
                     <el-divider></el-divider>
                     <el-row v-for="(question, index) in questions" :key="index">
                         <div style=" display: flex;align-items: flex-start">
-                            <el-avatar size="large" shape="square" src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"></el-avatar>
+<!--                            <el-avatar size="large" shape="square" :src="user.userFace" referrerPolicy="no-referrer"></el-avatar>-->
+                            <el-image referrerPolicy="no-referrer" class="imgCircle"
+                                style="width: 40px; height: 40px"
+                                :src="question.user.userFace"
+                                :fit="fit"></el-image>
                             <div style="margin-left: 10px">
                                 <el-link @click="goDetail(question)" type="primary">{{ question.title }}</el-link> <br>
                                 <span class="text_desc">
@@ -134,6 +138,9 @@
 </script>
 
 <style>
+.imgCircle{
+    border-radius: 5px;
+}
 .indexContainer{
     margin-left: 150px;
     margin-right: 150px;

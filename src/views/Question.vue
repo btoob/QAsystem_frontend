@@ -36,64 +36,92 @@
                     <div style="margin-left: 10px">
                         <i class="el-icon-files" style="margin-bottom: 15px" >   {{question.title}}</i> <br>
                         <span class="text_desc">
-                                    <span>{{question.commentCount}}</span> 个回复 | <span>{{question.viewCount}}</span> 次浏览 | 发布时间: <span>{{question.updateTime}}</span>
-                                </span>
+                            <span>{{question.commentCount}}</span> 个回复 | <span>{{question.viewCount}}</span> 次浏览 | 发布时间: <span>{{question.updateTime}} | <router-link to="/publish" v-if="question.userId===user.id">
+                        <el-button icon="el-icon-edit-outline" type="text"
+                                   style="padding-top: 0;padding-bottom: 0; color:
+                                   #000000;width: auto;height: auto;font-family: 黑体,serif ;color: gray;
+                                   align-items: center"
+                                   size="normal" @click="goEdit">编辑</el-button></router-link></span>
+
+                        </span>
                     </div>
                     <el-divider></el-divider>
                     <span style="margin-left: 25px">{{question.description}}</span>
                     <el-divider></el-divider>
-                    <router-link to="/publish" v-if="question.userId===user.id">
-                        <el-button icon="el-icon-edit-outline" type="text"
-                                   style="padding-top: 0;padding-bottom: 0; color: #000000;width: auto;height: auto;margin-left: 25px;font-family: 黑体,serif ;color: gray;"
-                                   size="normal" @click="goEdit">编辑</el-button></router-link>
-                    <el-divider></el-divider>
+                    <!--加载一级评论-->
                     <div>
-                        <h4 class="comCount">{{question.commentCount}}个回复</h4>
-                        <el-divider></el-divider>
-                        <el-row v-for="(comment, index) in comments" :key="index">
+                        <h4 class="comCount" v-show="comments.length!==0">{{comments.length}}个回复</h4>
+                        <el-divider v-if="comments.length!==0"></el-divider>
+                        <el-row v-for="(comment, index) in comments" :key="index" style="margin-left: 20px">
                             <div style=" display: flex;align-items: flex-start">
                                 <el-avatar size="large" shape="square" src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"></el-avatar>
                                 <div style="margin-left: 15px">
-                                    <span style="font-size: 15px;font-family: 黑体,serif ;color: gray;">{{comment.commentator}}</span>
+                                    <span style="font-size: 10px;font-family: 黑体,serif ;color: gray;">{{comment.user.name}}</span>
                                     <div>
                                         <span>{{comment.content}}</span>
                                     </div>
                                 </div>
                             </div>
+                            <!--点赞+二级评论-->
                             <div style="margin-top: 10px;margin-left: 50px;font-size: 20px;font-family: 黑体,serif ;color: gray;" class="text_desc">
-                                <div class="el-icon-check" style="margin-right: 10px;" @click="doAgree">  {{ agree }}</div>
-                                <div class="el-icon-close" style="margin-right: 10px" @click="doDisagree">  {{disagree}}</div>
-                                <div class="el-icon-chat-dot-square" >  {{commentCount}}</div>
+                                <el-badge :value=agree class="item" type="info">
+                                    <el-button icon="el-icon-check" type="info" plain size="mini"
+                                               style="color: #000000;width: auto;height: auto;"
+                                               @click="doAgree"></el-button>
+                                </el-badge>
+                                <el-badge :value="disagree" class="item" type="info">
+                                <el-button icon="el-icon-close" type="info" plain size="mini"
+                                           style="color: #000000;width: auto;height: auto;margin-left: 10px"
+                                           @click="doDisagree"></el-button></el-badge>
+                                <!--二级评论按钮-->
+
+                                <el-badge :value=agree class="item" type="info">
+                                    <el-button icon="el-icon-chat-dot-square" type="info" plain size="mini"
+                                               style="color: #000000;width: auto;height: auto;margin-left: 10px"
+                                               ></el-button>
+                                </el-badge>
+
+                            </div>
+                            <div v-show="showSecondaryComments===true">在这里二级评论
+
                             </div>
                             <el-divider style="margin-top: 3px"></el-divider>
+
+
                         </el-row>
                     </div>
-                    <h4 class="comCount">提交回复</h4>
-                    <el-divider></el-divider>
-                    <div style=" display: flex;align-items: flex-start">
+
+                    <!--添加评论-->
+                    <div style=" display: flex;align-items: flex-start;margin-top: 15px">
                         <el-avatar size="large" shape="square" src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"></el-avatar>
                         <div style="margin-left: 10px;">
-                            <span style="font-family: 黑体,serif;font-size:15px ">{{ user.name }}</span> <br>
+                            <span style="font-size: 10px;font-family: 黑体,serif ;color: gray;">{{ user.name }}</span> <br>
                         </div>
                     </div>
-                    <el-input style="margin-top: 10px"
-                        type="textarea"
-                        :rows="5"
-                        placeholder="请输入内容"
-                        v-model="textarea">
-                    </el-input>
-                    <div style="display: flex;justify-content: flex-end;margin-top: 10px" >
-                        <el-button type="primary" style="width: auto;height: auto" @click="doPublish">提交</el-button>
-                    </div>
+                    <el-form :model="commentForm">
+                        <el-form-item>
+                            <el-input style="margin-top: 10px"
+                                      type="textarea"
+                                      :rows="5"
+                                      placeholder="请输入内容"
+                                      v-model="commentForm.content">
+                            </el-input>
+                        </el-form-item>
+                        <el-form-item>
+                            <div style="display: flex;justify-content: flex-end;margin-top: 5px" >
+                                <el-button type="primary" style="width: auto;height: auto" @click="doSubmitComment">提交</el-button>
+                            </div>
+                        </el-form-item>
+                    </el-form>
 
                 </el-main>
                 <el-aside width="300px" class="indexAside">
-                    <div>
-                        <div style="margin-top: 10px;margin-bottom: 5px">发起人</div>
+                    <div style="margin-left: 15px">
+                        <h4 style="margin-top: 10px;margin-bottom: 5px">发起人</h4>
                         <div style=" display: flex;align-items: flex-start">
                             <el-avatar size="large" shape="square" src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"></el-avatar>
                             <div style="margin-left: 10px;">
-                                <span style="font-family: 黑体,serif;font-size:15px ">{{ user.name }}</span> <br>
+                                <span style="font-family: 黑体,serif;font-size:15px ">{{ question.user.name }}</span> <br>
                             </div>
                         </div>
                     </div>
@@ -112,10 +140,18 @@ export default {
             question:JSON.parse(window.sessionStorage.getItem("question")),
             user:JSON.parse(window.sessionStorage.getItem("user")),
             canEdit:false,
+            commentForm:{
+                parentId:'',
+                type:1,
+                commentator:'',
+                content:'',
+            },
             comments:[],
+            secondComments:[],
             agree:0,
             disagree:0,
             commentCount:0,
+            showSecondaryComments:false,
         }
     },
     mounted() {
@@ -131,12 +167,25 @@ export default {
         next()
     },
     methods:{
+        SecondaryComments(){
+            this.showSecondaryComments=true;
+        },
+        doSubmitComment(){
+            this.commentForm.parentId=this.question.id;
+            this.commentForm.commentator=this.user.id;
+            this.postRequest("/comment/", this.commentForm).then(resp=>{
+                if (resp){
+                    this.initComments();
+                    this.commentForm.content='';
+                }
+            })
+        },
         doAgree(){
           this.agree+=1
         },
         doDisagree(){this.disagree+=1},
         initComments(){
-            this.getRequest("/comment/").then(resp=>{
+            this.getRequest("/comment/"+this.question.id).then(resp=>{
                 if (resp){
                     this.comments=resp;
                 }
@@ -181,7 +230,7 @@ export default {
 .comCount{
     font-size: 20px;
     font-family: 黑体,serif ;
-    color: #0f0f0f;
+    color: darkgray;
     border-bottom: #1b6d85;
 }
 </style>
