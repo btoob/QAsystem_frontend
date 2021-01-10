@@ -54,7 +54,10 @@
                         <el-divider v-if="comments.length!==0"></el-divider>
                         <el-row v-for="(comment, index) in comments" :key="index" style="margin-left: 20px">
                             <div style=" display: flex;align-items: flex-start">
-                                <el-avatar size="large" shape="square" src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"></el-avatar>
+                                <el-image referrerPolicy="no-referrer" class="imgCircle"
+                                          style="width: 40px; height: 40px"
+                                          :src="comment.user.userFace"
+                                          :fit="fit"></el-image>
                                 <div style="margin-left: 15px">
                                     <span style="font-size: 10px;font-family: 黑体,serif ;color: gray;">{{comment.user.name}}</span>
                                     <div>
@@ -93,7 +96,10 @@
 
                     <!--添加评论-->
                     <div style=" display: flex;align-items: flex-start;margin-top: 15px">
-                        <el-avatar size="large" shape="square" src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"></el-avatar>
+                        <el-image referrerPolicy="no-referrer" class="imgCircle"
+                                  style="width: 40px; height: 40px"
+                                  :src="user.userFace"
+                                  :fit="fit"></el-image>
                         <div style="margin-left: 10px;">
                             <span style="font-size: 10px;font-family: 黑体,serif ;color: gray;">{{ user.name }}</span> <br>
                         </div>
@@ -119,7 +125,10 @@
                     <div style="margin-left: 15px">
                         <h4 style="margin-top: 10px;margin-bottom: 5px">发起人</h4>
                         <div style=" display: flex;align-items: flex-start">
-                            <el-avatar size="large" shape="square" src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"></el-avatar>
+                            <el-image referrerPolicy="no-referrer" class="imgCircle"
+                                      style="width: 40px; height: 40px"
+                                      :src="question.user.userFace"
+                                      :fit="fit"></el-image>
                             <div style="margin-left: 10px;">
                                 <span style="font-family: 黑体,serif;font-size:15px ">{{ question.user.name }}</span> <br>
                             </div>
@@ -167,9 +176,6 @@ export default {
         next()
     },
     methods:{
-        SecondaryComments(){
-            this.showSecondaryComments=true;
-        },
         doSubmitComment(){
             this.commentForm.parentId=this.question.id;
             this.commentForm.commentator=this.user.id;
