@@ -136,6 +136,8 @@
                             message: '已取消操作'
                         });
                     });
+                }else if(cmd === 'userinfo'){
+                    this.$router.push("/profile")
                 }
             }
         }
@@ -156,7 +158,7 @@
     box-sizing: border-box;
     display: flex;
     align-items: baseline;
-    justify-content: space-between;
+    justify-content: left;
 }
 
 .indexMain{

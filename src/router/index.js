@@ -4,6 +4,7 @@ import Login from "@/views/Login";
 import Index from "@/views/Index";
 import Question from "@/views/Question";
 import Publish from "@/views/Publish";
+import Profile from "@/views/Profile";
 Vue.use(VueRouter)
 
 const routes = [
@@ -38,6 +39,14 @@ const routes = [
     component: Publish,
     meta:{
       title:'问题发布页'
+    }
+  },
+  {
+    path: '/profile',
+    name: 'Profile',
+    component: Profile,
+    meta: {
+      title: '个人问题详情页 '
     }
   },
 
