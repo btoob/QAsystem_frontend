@@ -48,6 +48,13 @@
                     <el-divider></el-divider>
                     <span style="margin-left: 25px">{{question.description}}</span>
                     <el-divider></el-divider>
+                    <div style="display:flex;">
+
+                    <div style="margin-left: 20px;" v-for="(tag, i) in question.tag">
+                        <el-tag type="warning">{{ tag }}</el-tag>
+                    </div>
+                    </div>
+                    <el-divider></el-divider>
                     <!--加载一级评论-->
                     <div>
                         <h4 class="comCount" v-show="comments.length!==0">{{comments.length}}个回复</h4>
@@ -235,7 +242,7 @@ export default {
 }
 .comCount{
     font-size: 20px;
-    font-family: 黑体,serif ;
+    font-family: inherit;
     color: darkgray;
     border-bottom: #1b6d85;
 }
