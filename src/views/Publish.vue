@@ -10,14 +10,16 @@
                     vertical-align: mathematical;">
                         <el-input v-model="input" placeholder="" size="medium"
                                   style="margin-right: 8px;width: 200px"></el-input>
-                        <el-button size="medium" type="info" icon="el-icon-search" style="width: auto;height: auto">搜索</el-button>
+                        <el-button size="medium" type="info" icon="el-icon-search" style="width: auto;height: auto">搜索
+                        </el-button>
                     </div>
                 </div>
                 <div>
 
                     <el-button icon="el-icon-edit" type="text"
                                style="color: #000000;width: auto;height: auto;margin-right: 25px"
-                               size="normal" @click="goPublish">发布</el-button>
+                               size="normal" @click="goPublish">发布
+                    </el-button>
                     <el-dropdown class="userInfo" @command="commandHandler" trigger="click" style="cursor: pointer">
                         <span class="el-dropdown-link">
                         {{ user.name }}<i class="el-icon-arrow-down el-icon--right"></i>
@@ -33,31 +35,34 @@
             </el-header>
             <el-container class="indexContainer">
                 <el-main class="indexMain">
-                    <i class="el-icon-document-add" style="margin-bottom: 10px" >   发起</i>
+                    <i class="el-icon-document-add" style="margin-bottom: 10px"> 发起</i>
                     <el-divider></el-divider>
                     <div>
-                        <el-form label-position="top" label-width="40px" :model="formLabelAlign" >
+                        <el-form label-position="top" label-width="40px" :model="formLabelAlign">
                             <el-form-item label="问题标题(简单扼要)" class="item">
                                 <el-input v-model="formLabelAlign.title" style="width: 50%;" class="e_input"></el-input>
                             </el-form-item>
                             <el-form-item label="问题补充 (必填，请参照右侧提示):" class="item">
-                                <el-input :autosize="{ minRows: 4, maxRows: 8}" v-model="formLabelAlign.description" type="textarea"></el-input>
+                                <el-input :autosize="{ minRows: 4, maxRows: 8}" v-model="formLabelAlign.description"
+                                          type="textarea"></el-input>
                             </el-form-item>
                             <el-form-item label="添加标签:" class="item">
-<!--                                <el-autocomplete  v-model="formLabelAlign.tag"  style="width: 50%;" class="e_input"></el-autocomplete>-->
-<!--                                <el-input v-model="formLabelAlign.tag">-->
+                                <!--                                <el-autocomplete  v-model="formLabelAlign.tag"  style="width: 50%;" class="e_input"></el-autocomplete>-->
+                                <!--                                <el-input v-model="formLabelAlign.tag">-->
                                 <el-cascader :show-all-levels="false" v-model="selectedOptions"
-                                    :options="tagDTOs"
-                                    :props="props"
-                                    clearable style="margin-top: 0"></el-cascader>
-<!--                                </el-input>-->
-<!--                                <el-cascader v-model="formLabelAlign.tag" :options="options" :show-all-levels="false"></el-cascader>-->
+                                             :options="tagDTOs"
+                                             :props="props"
+                                             clearable style="margin-top: 0"></el-cascader>
+                                <!--                                </el-input>-->
+                                <!--                                <el-cascader v-model="formLabelAlign.tag" :options="options" :show-all-levels="false"></el-cascader>-->
 
                             </el-form-item>
                         </el-form>
                     </div>
-                    <div style="display: flex;justify-content: flex-end" >
-                        <el-button type="primary" style="width: auto;height: auto" @click="doPublish">{{buttonValue}}</el-button>
+                    <div style="display: flex;justify-content: flex-end">
+                        <el-button type="primary" style="width: auto;height: auto" @click="doPublish">
+                            {{ buttonValue }}
+                        </el-button>
                     </div>
                 </el-main>
                 <el-aside width="300px" class="indexAside">
@@ -80,103 +85,111 @@
 </template>
 
 <script>
-    export default {
-        name: "Publish",
-        data(){
-            return{
-                user:JSON.parse(window.sessionStorage.getItem("user")),
-                question:JSON.parse(window.sessionStorage.getItem("question")),
-                formLabelAlign: {
-                    title: '',
-                    description: '',
-                    tag: '',
-                    userId: '',
-                },
-                selectedOptions:[],
-                buttonValue:'确认发起',
-                tagDTOs:[],
-                props: { multiple: true },
+export default {
+    name: "Publish",
+    data() {
+        return {
+            user: JSON.parse(window.sessionStorage.getItem("user")),
+            question: JSON.parse(window.sessionStorage.getItem("question")),
+            formLabelAlign: {
+                title: '',
+                description: '',
+                tag: '',
+                userId: '',
+            },
+            selectedOptions: [],
+            buttonValue: '确认发起',
+            tagDTOs: [],
+            props: {multiple: true},
+        }
+    },
+    mounted() {
+        this.showEditData();
+        this.getTags();
+    },
+    methods: {
+        getTags() {
+            this.getRequest("/publish/getTags/").then(resp => {
+                if (resp) {
+                    this.tagDTOs = resp.object;
+                }
+            })
+        },
+        goPublish() {
+            //从导航栏发布按钮跳转到发布页面
+            window.sessionStorage.removeItem("question");
+            this.buttonValue = '确认发起';
+            this.formLabelAlign = {
+                id: '',
+                title: '',
+                description: '',
+                tag: '',
+                userId: '',
+            }
+            this.$router.replace("/publish")
+        },
+        showEditData() {
+            //从问题详情页面中的edit按钮跳转到发布问题页面, 是为了修改
+            //需要将问题详情中的属性回显到问题发布栏中
+            if (this.question != null) {
+                this.buttonValue = '确认修改';
+                this.formLabelAlign.title = this.question.title;
+                this.formLabelAlign.description = this.question.description;
+                this.formLabelAlign.tag = this.question.tag;
+                this.formLabelAlign.userId = this.question.userId;
             }
         },
-        mounted() {
-            this.showEditData();
-            this.getTags();
+        doEdit() {
+
         },
-        methods:{
-            getTags(){
-                this.getRequest("/publish/getTags/").then(resp=>{
-                    if(resp){
-                        this.tagDTOs=resp.object;
+        doPublish() {
+            this.formLabelAlign.userId = this.user.id
+            if (this.buttonValue === '确认发起') {
+                console.log(this.selectedOptions)
+                for (let i = 0; i < this.selectedOptions.length; i++) {
+                    if (i !== this.selectedOptions.length - 1) {
+                        this.formLabelAlign.tag += this.selectedOptions[i][1] + ',';
+                    }else{
+                        this.formLabelAlign.tag += this.selectedOptions[i][1];
+                    }
+                }
+                // this.formLabelAlign.tag=this.selectedOptions[0][1]
+                this.postRequest("/publish/", this.formLabelAlign).then(resp => {
+                    if (resp) {
+                        console.log(resp)
+                        this.$router.push("/index")
                     }
                 })
-            },
-            goPublish(){
-                //从导航栏发布按钮跳转到发布页面
-                window.sessionStorage.removeItem("question");
-                this.buttonValue='确认发起';
-                this.formLabelAlign={
-                    id:'',
-                    title: '',
-                    description: '',
-                    tag: '',
-                    userId: '',}
-                this.$router.replace("/publish")
-            },
-            showEditData(){
-                //从问题详情页面中的edit按钮跳转到发布问题页面, 是为了修改
-                //需要将问题详情中的属性回显到问题发布栏中
-                if (this.question!=null){
-                    this.buttonValue='确认修改';
-                    this.formLabelAlign.title=this.question.title;
-                    this.formLabelAlign.description=this.question.description;
-                    this.formLabelAlign.tag=this.question.tag;
-                    this.formLabelAlign.userId=this.question.userId;
-                }
-            },
-            doEdit(){
-
-            },
-            doPublish(){
-                this.formLabelAlign.userId=this.user.id
-                if (this.buttonValue==='确认发起'){
-                    console.log(this.selectedOptions)
-                    this.formLabelAlign.tag=this.selectedOptions[0][1]
-                    this.postRequest("/publish/",this.formLabelAlign).then(resp=>{
-                        if (resp){
-                            console.log(resp)
-                            this.$router.push("/index")
-                        }
-                    })
-                }else{
-                    this.formLabelAlign.id=this.question.id;
-                    this.putRequest("/publish/update/", this.formLabelAlign).then(resp=>{
-                        if (resp){
-                            console.log(resp)
-                            this.$router.replace("/index")
-                        }
-                    })
-                }
-            },
-            commandHandler(cmd) {
-                if (cmd === 'logout') {
-                    this.$confirm('此操作将注销登录, 是否继续?', '提示', {
-                        confirmButtonText: '确定',
-                        cancelButtonText: '取消',
-                        type: 'warning'
-                    }).then(() => {
-                        window.sessionStorage.removeItem("user")
-                        window.sessionStorage.removeItem("question");
-                        this.$router.replace("/");
-                    }).catch(() => {
-                        this.$message({
-                            type: 'info',
-                            message: '已取消操作'
-                        });
+            } else {
+                this.formLabelAlign.id = this.question.id;
+                this.putRequest("/publish/update/", this.formLabelAlign).then(resp => {
+                    if (resp) {
+                        // console.log(resp)
+                        this.$router.replace("/index")
+                    }
+                })
+            }
+        },
+        commandHandler(cmd) {
+            if (cmd === 'logout') {
+                this.$confirm('此操作将注销登录, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    window.sessionStorage.removeItem("user")
+                    window.sessionStorage.removeItem("question");
+                    this.$router.replace("/");
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消操作'
                     });
-                }
+                });
             }
         }
     }
+}
 </script>
 
 
@@ -187,9 +200,10 @@
     width: 80%;
     margin: 12px 0;
 }
-.el-icon-document-add{
+
+.el-icon-document-add {
     font-size: 25px;
-    font-family: 黑体,serif ;
+    font-family: 黑体, serif;
     color: gray;
     border-bottom: #1b6d85;
 }
@@ -206,7 +220,8 @@
     box-sizing: border-box;
     margin-top: 15px;
 }
-.e_input .el-input__inner{
+
+.e_input .el-input__inner {
     text-align: left;
 }
 </style>
