@@ -50,11 +50,12 @@
                     <el-divider></el-divider>
                     <div style="display:flex;">
 
-                    <div style="margin-left: 20px;" v-for="(tag, i) in question.tag">
-                        <el-tag type="warning">{{ tag }}</el-tag>
-                    </div>
+                        <div style="margin-left: 20px;" v-for="(tag, i) in question.tag">
+                            <el-tag type="warning">{{ tag }}</el-tag>
+                        </div>
                     </div>
                     <el-divider></el-divider>
+
                     <!--加载一级评论-->
                     <div>
                         <h4 class="comCount" v-show="comments.length!==0">{{comments.length}}个回复</h4>
@@ -142,6 +143,15 @@
                         </div>
                     </div>
 
+                    <el-divider></el-divider>
+
+                    <div style="margin-left: 15px">
+                        <h4 style="margin-top: 10px;margin-bottom: 5px">相关问题</h4>
+                        <el-row v-for="(related, i) in relatedQuestion">
+                            <div v-if="related.title!==question.title" style="font-size: 13px"><el-link type="primary" @click="goDetail(related)" > {{ related.title }}</el-link></div>
+                        </el-row>
+                    </div>
+
                 </el-aside>
             </el-container>
         </el-container>
@@ -150,6 +160,7 @@
 
 <script>
 export default {
+    inject:['reload'],                                 //注入App里的reload方法
     name: "Question",
     data(){
         return{
@@ -168,6 +179,7 @@ export default {
             disagree:0,
             commentCount:0,
             showSecondaryComments:false,
+            relatedQuestion:[],
         }
     },
     mounted() {
@@ -175,6 +187,7 @@ export default {
             this.canEdit=true;
         }
         this.initComments();
+        this.initRelatedQuestion();
     },
     beforeRouteLeave(to, from, next){
         if (this.canEdit===false && window.sessionStorage.getItem("question")){
@@ -183,6 +196,27 @@ export default {
         next()
     },
     methods:{
+        goDetail(related){
+            this.getRequest("question/"+related.id).then(resp=>{
+                if (resp){
+                    console.log(resp)
+                    window.sessionStorage.setItem("question", JSON.stringify(resp));
+                    this.reload();
+                }
+            })
+        },
+        initRelatedQuestion(){
+            let url = "/question/related?";
+            this.question.tag.forEach(key=>{
+                url+="tags="+key+"&";
+            })
+            this.getRequest(url).then(resp=>{
+                if (resp){
+                    console.log(resp)
+                    this.relatedQuestion=resp;
+                }
+            })
+        },
         doSubmitComment(){
             this.commentForm.parentId=this.question.id;
             this.commentForm.commentator=this.user.id;

@@ -116,7 +116,7 @@
                     if (resp){
                         console.log(resp)
                         window.sessionStorage.setItem("question", JSON.stringify(resp));
-                        this.$router.push("/question")
+                        this.$router.replace("/question")
                     }
                 })
             },
@@ -137,7 +137,7 @@
                         });
                     });
                 }else if(cmd === 'userinfo'){
-                    this.$router.push("/profile")
+                    this.$router.replace("/profile")
                 }
             }
         }

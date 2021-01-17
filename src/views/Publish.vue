@@ -157,7 +157,7 @@ export default {
                 this.postRequest("/publish/", this.formLabelAlign).then(resp => {
                     if (resp) {
                         console.log(resp)
-                        this.$router.push("/index")
+                        this.$router.replace("/index")
                     }
                 })
             } else {
