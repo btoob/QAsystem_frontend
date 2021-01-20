@@ -51,7 +51,7 @@
                     <div style="display:flex;">
 
                         <div style="margin-left: 20px;" v-for="(tag, i) in question.tag">
-                            <el-tag type="warning">{{ tag }}</el-tag>
+                            <el-tag type="warning" size="mini">{{ tag }}</el-tag>
                         </div>
                     </div>
                     <el-divider></el-divider>
@@ -159,8 +159,7 @@
 </template>
 
 <script>
-export default {
-    inject:['reload'],                                 //注入App里的reload方法
+export default {                                //注入App里的reload方法
     name: "Question",
     data(){
         return{
@@ -201,7 +200,7 @@ export default {
                 if (resp){
                     console.log(resp)
                     window.sessionStorage.setItem("question", JSON.stringify(resp));
-                    this.reload();
+                    this.$router.go(0);
                 }
             })
         },

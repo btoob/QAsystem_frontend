@@ -38,11 +38,11 @@
             </el-header>
             <el-container class="indexContainer">
                 <el-main class="indexMain">
-                    <i class="el-icon-files" style="margin-bottom: 15px" >   我的问题</i>
+                    <i class="el-icon-files" style="margin-bottom: 15px" >  {{ title }}</i>
                     <el-divider></el-divider>
-                    <el-row v-for="(question, index) in personalQuestions" :key="index">
+
+                    <el-row v-show="title==='我的问题'" v-for="(question, index) in personalQuestions" :key="index">
                         <div style=" display: flex;align-items: flex-start">
-                            <!--                            <el-avatar size="large" shape="square" :src="user.userFace" referrerPolicy="no-referrer"></el-avatar>-->
                             <el-image referrerPolicy="no-referrer" class="imgCircle"
                                       style="width: 40px; height: 40px"
                                       :src="question.user.userFace"
@@ -53,6 +53,17 @@
                                     <span>{{question.commentCount}}</span> 个回复 · <span>{{question.viewCount}}</span> 次浏览 · <span>{{question.updateTime}}</span>
                                 </span>
                             </div>
+                        </div>
+                        <el-divider style="margin-top: 3px"></el-divider>
+                    </el-row>
+
+                    <el-row v-show="title==='最新回复'" v-for="(reply, j) in replies" :key="j">
+                        <div style=" display: flex;align-items: flex-start;font-size: 13px">
+                            <span style="margin-right: 10px">{{reply.notifierName}} </span>
+                            回复了问题
+                            <span style="margin-left: 10px">
+                                <el-link @click="goDetailByQuestionId(reply)" type="primary"> {{reply.questionTitle}}</el-link>
+                            </span>
                         </div>
                         <el-divider style="margin-top: 3px"></el-divider>
                     </el-row>
@@ -71,8 +82,8 @@
 
                 </el-main>
                 <el-aside width="300px" class="indexAside">
-                    <el-menu style=""
-                        default-active="2"
+                    <el-menu
+                        default-active="1"
                         class="el-menu-vertical-demo"
                         @open="handleOpen"
                         @close="handleClose">
@@ -80,7 +91,7 @@
                             <i class="el-icon-menu"></i>
                             <span slot="title">我的问题</span>
                         </el-menu-item>
-                        <el-menu-item index="2">
+                        <el-menu-item index="2" @click="initReplies">
                             <i class="el-icon-menu"></i>
                             <span slot="title">最新回复</span>
                         </el-menu-item>
@@ -105,16 +116,37 @@ export default {
     data(){
         return{
             personalQuestions:[],
+            replies:[],
             user:JSON.parse(window.sessionStorage.getItem("user")),
             total:'50',
             page:'1',
             size:'5',
+            title:'我的问题',
         }
     },
     mounted() {
         this.initQuestions()
     },
     methods:{
+        goDetailByQuestionId(reply){
+            this.getRequest("question/"+reply.questionId).then(resp=>{
+                if (resp){
+                    console.log(resp)
+                    window.sessionStorage.setItem("question", JSON.stringify(resp));
+                    this.$router.push("/question")
+                }
+            })
+        },
+        initReplies(){
+            this.getRequest("/profile/"+this.user.id+"?page="+this.page+"&size="+this.size).then(resp=>{
+                if (resp){
+                    console.log(resp);
+                    this.title='最新回复';
+                    this.replies =resp.data;
+                    this.total=resp.total;
+                }
+            })
+        },
         handleCurrentChange(currentPage){
             this.page=currentPage;
             this.initQuestions();
@@ -126,6 +158,7 @@ export default {
         initQuestions(){
             this.getRequest("question/profile/"+this.user.id+"?page="+this.page+"&size="+this.size).then(resp=>{
                 if (resp){
+                    this.title='我的问题';
                     console.log(resp.data)
                     this.personalQuestions=resp.data;
                     this.total=resp.total;
