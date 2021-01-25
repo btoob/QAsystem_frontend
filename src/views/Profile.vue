@@ -58,11 +58,14 @@
                     </el-row>
 
                     <el-row v-show="title==='最新回复'" v-for="(reply, j) in replies" :key="j">
-                        <div style=" display: flex;align-items: flex-start;font-size: 13px">
+                        <div style=" display: flex;align-items: center;font-size: 13px">
                             <span style="margin-right: 10px">{{reply.notifierName}} </span>
                             回复了问题
                             <span style="margin-left: 10px">
                                 <el-link @click="goDetailByQuestionId(reply)" type="primary"> {{reply.questionTitle}}</el-link>
+                            </span>
+                            <span v-show="reply.status===0" class="unRead">
+                                未读
                             </span>
                         </div>
                         <el-divider style="margin-top: 3px"></el-divider>
@@ -140,6 +143,11 @@ export default {
             window.sessionStorage.removeItem("notification");
         },
         goDetailByQuestionId(reply){
+            this.putRequest("notification/status/"+reply.id).then(resp=>{
+                if (resp){
+                    console.log(resp)
+                }
+            })
             this.getRequest("question/"+reply.questionId).then(resp=>{
                 if (resp){
                     console.log(resp)
@@ -149,7 +157,7 @@ export default {
             })
         },
         initReplies(){
-            this.getRequest("/profile/"+this.user.id+"?page="+this.page+"&size="+this.size).then(resp=>{
+            this.getRequest("/notification/"+this.user.id+"?page="+this.page+"&size="+this.size).then(resp=>{
                 if (resp){
                     console.log(resp);
                     this.title='最新回复';
@@ -209,6 +217,13 @@ export default {
 </script>
 
 <style>
+.unRead{
+    margin-left: 10px;
+    background-color: #b92c28;
+    border-radius: 5px;
+    padding: 3px;
+    color: white
+}
 .indexAside{
     margin-left: 1px;
     background-color: white;

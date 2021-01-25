@@ -21,7 +21,9 @@
                     <router-link to="/profile">
                     <el-button type="text"
                                style="color: #000000;width: auto;height: auto;margin-right: 25px"
-                               size="normal" @click="goNotification">通知<span class="notificate">34</span></el-button></router-link>
+                               size="normal" @click="goNotification">通知
+                        <span class="noticeNum">{{notificationNum}}</span>
+                    </el-button></router-link>
                     <el-dropdown class="userInfo" @command="commandHandler" trigger="click" style="cursor: pointer;vertical-align:baseline">
                         <span class="el-dropdown-link">
                         {{ user.name}}<i class="el-icon-arrow-down el-icon--right"></i>
@@ -93,16 +95,26 @@
                 page:'1',
                 size:'10',
                 sectionName:'我的问题',
+                notificationNum:0,
+
             }
         },
         mounted() {
-            this.initQuestions()
+            this.initQuestions();
+            this.initNotificationNum();
         },
         beforeRouteLeave(to, from, next){
             window.sessionStorage.setItem("notification", this.sectionName);
             next()
         },
         methods:{
+            initNotificationNum(){
+                this.getRequest("notification/notificationNum/"+this.user.id).then(resp=>{
+                    if (resp){
+                        this.notificationNum=resp.object;
+                    }
+                })
+            },
             goNotification(){
               this.sectionName='最新回复';
             },
@@ -157,7 +169,7 @@
 </script>
 
 <style>
-.notificate{
+.noticeNum{
     margin-left: 5px;
     background-color: #8c939d;
     border-radius: 5px;
