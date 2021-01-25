@@ -2,39 +2,7 @@
     <div>
         <el-container>
             <el-header class="indexHeader" height="50px">
-                <div style="display: flex; align-items: baseline">
-                    <router-link to="/index" style="text-decoration: none">
-                        <div class="title">问答社区</div>
-                    </router-link>
-                    <div style="display: flex; align-items: baseline;
-                    vertical-align: mathematical;">
-                        <el-input v-model="input" placeholder="" size="medium"
-                                  style="margin-right: 8px;width: 200px"></el-input>
-                        <el-button size="medium" type="info" icon="el-icon-search" style="width: auto;height: auto">搜索</el-button>
-                    </div>
-                </div>
-                <div>
-                    <router-link to="/publish">
-                        <el-button icon="el-icon-edit" type="text"
-                                   style="color: #000000;width: auto;height: auto;margin-right: 25px"
-                                   size="normal" @click="goChat">发布</el-button></router-link>
-                    <el-dropdown class="userInfo" @command="commandHandler" trigger="click" style="cursor: pointer;vertical-align:baseline">
-                        <span class="el-dropdown-link">
-                        {{ user.name}}<i class="el-icon-arrow-down el-icon--right"></i>
-                            <el-image referrerPolicy="no-referrer" class="imgCircle"
-                                      style="width: 30px; height: 30px;top:8px"
-                                      :src="user.userFace"
-                                      :fit="fit"></el-image>
-                        </span>
-                        <el-dropdown-menu slot="dropdown">
-                            <el-dropdown-item command="userinfo">个人中心</el-dropdown-item>
-                            <el-dropdown-item command="setting">设置</el-dropdown-item>
-                            <el-dropdown-item command="logout" divided>注销登录</el-dropdown-item>
-                        </el-dropdown-menu>
-                    </el-dropdown>
-
-                </div>
-
+                <Header></Header>
             </el-header>
             <el-container class="indexContainer">
                 <el-main class="indexMain">
@@ -114,6 +82,7 @@
 </template>
 
 <script>
+import Header from "../../components/Header";
 export default {
     name: "Profile",
     data(){
@@ -127,6 +96,9 @@ export default {
             title:'我的问题',
             defaultActive:1,
         }
+    },
+    components:{
+        Header,
     },
     mounted() {
         this.initSectionName();
