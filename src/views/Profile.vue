@@ -83,7 +83,7 @@
                 </el-main>
                 <el-aside width="300px" class="indexAside">
                     <el-menu
-                        default-active="1"
+                        :default-active=defaultActive
                         class="el-menu-vertical-demo"
                         @open="handleOpen"
                         @close="handleClose">
@@ -122,12 +122,23 @@ export default {
             page:'1',
             size:'5',
             title:'我的问题',
+            defaultActive:1,
         }
     },
     mounted() {
-        this.initQuestions()
+        this.initSectionName();
     },
     methods:{
+        initSectionName(){
+            if (window.sessionStorage.getItem("notification")==="最新回复"){
+                this.defaultActive=2;
+                this.initReplies();
+            }else{
+                this.defaultActive=1;
+                this.initQuestions();
+            }
+            window.sessionStorage.removeItem("notification");
+        },
         goDetailByQuestionId(reply){
             this.getRequest("question/"+reply.questionId).then(resp=>{
                 if (resp){

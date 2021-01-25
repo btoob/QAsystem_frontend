@@ -190,7 +190,7 @@ export default {                                //注入App里的reload方法
     },
     beforeRouteLeave(to, from, next){
         if (this.canEdit===false && window.sessionStorage.getItem("question")){
-            window.sessionStorage.removeItem("question")
+            window.sessionStorage.removeItem("question");
         }
         next()
     },
