@@ -14,19 +14,15 @@
                                 <el-input v-model="formLabelAlign.title" style="width: 50%;" class="e_input"></el-input>
                             </el-form-item>
                             <el-form-item label="问题补充 (必填，请参照右侧提示):" class="item">
-                                <el-input :autosize="{ minRows: 4, maxRows: 8}" v-model="formLabelAlign.description"
-                                          type="textarea"></el-input>
+<!--                                <el-input :autosize="{ minRows: 4, maxRows: 8}" v-model="formLabelAlign.description"-->
+<!--                                          type="textarea"></el-input>-->
+                                <mavon-editor :ishljs = "true" v-model="formLabelAlign.description" ref="md" @imgAdd="imgAdd" @imgDel="imgDel"/>
                             </el-form-item>
                             <el-form-item label="添加标签:" class="item">
-                                <!--                                <el-autocomplete  v-model="formLabelAlign.tag"  style="width: 50%;" class="e_input"></el-autocomplete>-->
-                                <!--                                <el-input v-model="formLabelAlign.tag">-->
                                 <el-cascader :show-all-levels="false" v-model="selectedOptions"
                                              :options="tagDTOs"
                                              :props="props"
                                              clearable style="margin-top: 0"></el-cascader>
-                                <!--                                </el-input>-->
-                                <!--                                <el-cascader v-model="formLabelAlign.tag" :options="options" :show-all-levels="false"></el-cascader>-->
-
                             </el-form-item>
                         </el-form>
                     </div>
@@ -35,6 +31,7 @@
                             {{ buttonValue }}
                         </el-button>
                     </div>
+
                 </el-main>
                 <el-aside width="300px" class="indexAside">
                     <div>
@@ -57,6 +54,7 @@
 
 <script>
 import Header from "../../components/Header";
+import axios from 'axios'
 export default {
     name: "Publish",
     data() {
@@ -83,6 +81,26 @@ export default {
         this.getTags();
     },
     methods: {
+        imgAdd (pos, $file) {
+            let formData = new FormData()
+            formData.append('file', $file)
+            axios({
+                url: '/file/upload',
+                method: 'post',
+                data: formData,
+                headers: { 'Content-Type': 'multipart/form-data;charset=UTF-8' ,
+                    'aaa':'aaa'
+                },
+            }).then((resp) => {
+                // 第二步.将返回的url替换到文本原位置![...](0) -> ![...](url)
+                //    this.$vm.$img2Url(pos, url.data);
+                console.log(resp)
+                this.$refs.md.$img2Url(pos, resp.object);
+            })
+        },
+        imgDel (pos) {
+            delete this.imgFile[pos]
+        },
         getTags() {
             this.getRequest("/publish/getTags/").then(resp => {
                 if (resp) {

@@ -19,7 +19,10 @@
                         </span>
                     </div>
                     <el-divider></el-divider>
-                    <span style="margin-left: 25px">{{question.description}}</span>
+<!--                    <span style="margin-left: 25px">{{question.description}}</span>-->
+                    <mavon-editor :value="question.description" :subfield="false" :defaultOpen="'preview'"
+                                  :toolbarsFlag = "false" :editable="false" :scrollStyle="true" :ishljs = "true"
+                    ></mavon-editor>
                     <el-divider></el-divider>
                     <div style="display:flex;">
 

@@ -21,6 +21,9 @@ Vue.config.productionTip = false
 Vue.config.devtools = true
 Vue.use(ElementUI);
 
+import mavonEditor from "mavon-editor";
+import "mavon-editor/dist/css/index.css";
+Vue.use(mavonEditor)
 
 router.beforeEach((to, from, next) => {
   /* 路由发生变化修改页面title */
