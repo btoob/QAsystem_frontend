@@ -2,7 +2,7 @@
     <div>
         <el-container>
             <el-header class="indexHeader" height="50px">
-            <Header></Header>
+                <Header></Header>
             </el-header>
 
             <el-container class="indexContainer">
@@ -20,7 +20,9 @@
                                 <el-link @click="goDetail(question)" type="primary">{{ question.title }}</el-link>
                                 <br>
                                 <span class="text_desc">
-                                    <span>{{ question.commentCount }}</span> 个回复 · <span>{{ question.viewCount }}</span> 次浏览 · <span>{{ question.updateTime }}</span>
+                                    <span>{{ question.commentCount }}</span> 个回复 · <span>{{ question.viewCount }}</span> 次浏览 · <span>{{
+                                        question.updateTime
+                                    }}</span>
                                 </span>
                             </div>
                         </div>
@@ -49,7 +51,8 @@
 </template>
 
 <script>
-import Header from "../../components/Header";
+import Header from "../components/Header";
+import func from "@/utils/func";
 export default {
     name: "Index",
     data() {
@@ -61,15 +64,21 @@ export default {
             size: '10',
             sectionName: '我的问题',
             notificationNum: 0,
+            searchInput: '',
 
         }
     },
-    components:{
+    components: {
         Header,
     },
     mounted() {
         this.initQuestions();
         this.initNotificationNum();
+        //Header页面调用本页面的方法   searchInput为Header中传过来的参数
+        func.$on("demo",(searchInput)=>{
+            this.searchInput=searchInput;
+            this.initQuestions();
+        })
     },
     beforeRouteLeave(to, from, next) {
         window.sessionStorage.setItem("notification", this.sectionName);
@@ -95,7 +104,14 @@ export default {
             this.initQuestions();
         },
         initQuestions() {
-            this.getRequest("question/?page=" + this.page + "&size=" + this.size).then(resp => {
+            let url = "question/?page=" + this.page + "&size=" + this.size;
+            // this.searchInput = window.sessionStorage.getItem("searchInput");
+            // window.sessionStorage.removeItem("searchInput");
+            if (this.searchInput !== null) {
+                url+="&search="+this.searchInput;
+                console.log(url)
+            }
+            this.getRequest(url).then(resp => {
                 if (resp) {
                     // alert(JSON.stringify(resp))
                     this.questions = resp.data;

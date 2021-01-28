@@ -135,7 +135,7 @@
 </template>
 
 <script>
-import Header from "../../components/Header";
+import Header from "@/components/Header";
 export default {                                //注入App里的reload方法
     name: "Question",
     data(){
