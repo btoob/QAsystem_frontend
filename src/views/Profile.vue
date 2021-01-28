@@ -77,12 +77,16 @@
                     </el-menu>
                 </el-aside>
             </el-container>
+            <el-footer>
+                <Footer></Footer>
+            </el-footer>
         </el-container>
     </div>
 </template>
 
 <script>
 import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 export default {
     name: "Profile",
     data(){
@@ -99,6 +103,7 @@ export default {
     },
     components:{
         Header,
+        Footer,
     },
     mounted() {
         this.initSectionName();

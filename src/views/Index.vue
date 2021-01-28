@@ -46,12 +46,16 @@
                     <h3>热门标签</h3>
                 </el-aside>
             </el-container>
+            <el-footer>
+                <Footer></Footer>
+            </el-footer>
         </el-container>
     </div>
 </template>
 
 <script>
 import Header from "../components/Header";
+import Footer from "@/components/Footer";
 import func from "@/utils/func";
 export default {
     name: "Index",
@@ -70,6 +74,7 @@ export default {
     },
     components: {
         Header,
+        Footer,
     },
     mounted() {
         this.initQuestions();

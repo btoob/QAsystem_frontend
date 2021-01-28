@@ -130,12 +130,16 @@
 
                 </el-aside>
             </el-container>
+            <el-footer>
+                <Footer></Footer>
+            </el-footer>
         </el-container>
     </div>
 </template>
 
 <script>
 import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 export default {                                //注入App里的reload方法
     name: "Question",
     data(){
@@ -160,6 +164,7 @@ export default {                                //注入App里的reload方法
     },
     components:{
         Header,
+        Footer,
     },
     mounted() {
         if (this.question.userId===this.user.id){
