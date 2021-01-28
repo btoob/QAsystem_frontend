@@ -43,7 +43,9 @@
 
                 </el-main>
                 <el-aside width="300px" class="indexAside">
-                    <h3>热门标签</h3>
+                    <span style="font-family: 黑体,serif;color: #0f0f0f">给点钱吧</span>
+                    <img width="262" height="286" src="../static/images/weixin.png">
+                    <img width="262" height="286" src="../static/images/zhifubao.png">
                 </el-aside>
             </el-container>
             <el-footer>
@@ -181,6 +183,7 @@ export default {
     display: flex;
     align-items: baseline;
     justify-content: left;
+    padding: 20px;
 }
 
 .indexMain {
