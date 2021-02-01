@@ -25,7 +25,6 @@
                     ></mavon-editor>
                     <el-divider></el-divider>
                     <div style="display:flex;">
-
                         <div style="margin-left: 20px;" v-for="(tag, i) in question.tag">
                             <el-tag type="warning" size="mini">{{ tag }}</el-tag>
                         </div>

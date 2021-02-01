@@ -44,8 +44,16 @@
                 </el-main>
                 <el-aside width="300px" class="indexAside">
                     <span style="font-family: 黑体,serif;color: #0f0f0f">给点钱吧</span>
-                    <img width="262" height="286" src="../static/images/weixin.png">
-                    <img width="262" height="286" src="../static/images/zhifubao.png">
+                    <img width="222" height="246" src="../static/images/weixin.png">
+                    <img width="222" height="246" src="../static/images/zhifubao.png">
+                    <el-divider></el-divider>
+                    <div>热门标签</div>
+                    <div style="display:flex;margin-top: 10px">
+                        <div style="margin-right: 8px" v-for="(tag, i) in hotTags">
+                            <el-tag type="warning" size="mini">{{ tag }}</el-tag>
+                        </div>
+                    </div>
+                    <el-divider></el-divider>
                 </el-aside>
             </el-container>
             <el-footer>
@@ -71,6 +79,7 @@ export default {
             sectionName: '我的问题',
             notificationNum: 0,
             searchInput: '',
+            hotTags:[],
 
         }
     },
@@ -79,6 +88,7 @@ export default {
         Footer,
     },
     mounted() {
+        this.initHotTags();
         this.initQuestions();
         this.initNotificationNum();
         //Header页面调用本页面的方法   searchInput为Header中传过来的参数
@@ -92,6 +102,13 @@ export default {
         next()
     },
     methods: {
+        initHotTags(){
+            this.getRequest("question/hotTags").then(resp=>{
+                if (resp){
+                    this.hotTags=resp
+                }
+            })
+        },
         initNotificationNum() {
             this.getRequest("notification/notificationNum/" + this.user.id).then(resp => {
                 if (resp) {
