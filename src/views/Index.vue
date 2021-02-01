@@ -50,7 +50,7 @@
                     <div>热门标签</div>
                     <div style="display:flex;margin-top: 10px">
                         <div style="margin-right: 8px" v-for="(tag, i) in hotTags">
-                            <el-tag type="warning" size="mini">{{ tag }}</el-tag>
+                            <el-tag type="warning" size="mini"><el-link  @click="initQuestionByTag(tag)">{{ tag }}</el-link></el-tag>
                         </div>
                     </div>
                     <el-divider></el-divider>
@@ -102,6 +102,18 @@ export default {
         next()
     },
     methods: {
+        initQuestionByTag(tag){
+
+            this.getRequest("question/tag/"+tag).then(resp=>{
+                if (resp){
+                    this.questions=[]
+                    this.total='0'
+                    this.questions=resp.data;
+                    this.total=resp.total;
+                }
+
+            })
+        },
         initHotTags(){
             this.getRequest("question/hotTags").then(resp=>{
                 if (resp){
