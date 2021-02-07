@@ -87,10 +87,16 @@ export default {
         Header,
         Footer,
     },
-    mounted() {
-        this.initHotTags();
+    created() {
         this.initQuestions();
+        this.initHotTags();
         this.initNotificationNum();
+    },
+    mounted() {
+        // this.initQuestions();
+        //
+        // this.initHotTags();
+        // this.initNotificationNum();
         //Header页面调用本页面的方法   searchInput为Header中传过来的参数
         func.$on("demo",(searchInput)=>{
             this.searchInput=searchInput;
