@@ -35,16 +35,18 @@
                 </el-main>
                 <el-aside width="300px" class="indexAside">
                     <div>
-                        <div>问题发起指南</div>
-                        • 问题标题: 请用精简的语言描述您发布的问题，不超过25字
-                        • 问题补充: 详细补充您的问题内容，并确保问题描述清晰直观, 并提供一些相关的资料：
-                        服务器运行环境信息；
-                        软件版本；
-                        问题发生的上下文信息；
-                        可以完整复现问题的代码（如可直接运行于 Kibana Console 的复现流程）；
-                        补充完整的异常和错误信息；
-                        注意阅读格式友好，代码和异常信息请用代码标签格式化张贴；
-                        • 选择标签: 选择一个或者多个合适的标签，不超过10个字
+                        <div class="text_desc" style="margin-bottom: 10px">问题发起指南</div>
+                        <div class="text_desc2">
+                            <div style="margin-bottom: 5px">• 问题标题: 请用<span style="color: red">精简</span>的语言描述您发布的问题，不超过25字</div>
+                            <div style="margin-bottom: 5px">• 问题补充: 详细补充您的问题内容，并确保问题描述清晰直观, 并提供一些相关的资料：</div>
+                            <div style="margin-bottom: 5px;margin-left: 5px">- 服务器运行环境信息；</div>
+                            <div style="margin-bottom: 5px;margin-left: 5px">- 软件版本；</div>
+                            <div style="margin-bottom: 5px;margin-left: 5px">- 问题发生的上下文信息；</div>
+                            <div style="margin-bottom: 5px;margin-left: 5px">- 可以完整复现问题的代码（如可直接运行于 Kibana Console 的复现流程）；</div>
+                            <div style="margin-bottom: 5px;margin-left: 5px">- 补充完整的异常和错误信息；</div>
+                            <div style="margin-bottom: 5px;margin-left: 5px">- 注意阅读格式友好，代码和异常信息请用代码标签格式化张贴；</div>
+                            <div style="margin-bottom: 5px">• 选择标签: 选择一个或者多个合适的标签，不超过10个字</div>
+                        </div>
                     </div>
                 </el-aside>
             </el-container>
@@ -133,7 +135,7 @@ export default {
                 this.buttonValue = '确认修改';
                 this.formLabelAlign.title = this.question.title;
                 this.formLabelAlign.description = this.question.description;
-                this.formLabelAlign.tag = this.question.tag;
+                // this.formLabelAlign.tag = this.question.tag;
                 this.formLabelAlign.userId = this.question.userId;
             }
         },
@@ -142,27 +144,43 @@ export default {
         },
         doPublish() {
             this.formLabelAlign.userId = this.user.id
+            for (let i = 0; i < this.selectedOptions.length; i++) {
+                if (i !== this.selectedOptions.length - 1) {
+                    this.formLabelAlign.tag += this.selectedOptions[i][1] + ',';
+                }else{
+                    this.formLabelAlign.tag += this.selectedOptions[i][1];
+                }
+            }
             if (this.buttonValue === '确认发起') {
                 console.log(this.selectedOptions)
-                for (let i = 0; i < this.selectedOptions.length; i++) {
-                    if (i !== this.selectedOptions.length - 1) {
-                        this.formLabelAlign.tag += this.selectedOptions[i][1] + ',';
-                    }else{
-                        this.formLabelAlign.tag += this.selectedOptions[i][1];
-                    }
-                }
+                // for (let i = 0; i < this.selectedOptions.length; i++) {
+                //     if (i !== this.selectedOptions.length - 1) {
+                //         this.formLabelAlign.tag += this.selectedOptions[i][1] + ',';
+                //     }else{
+                //         this.formLabelAlign.tag += this.selectedOptions[i][1];
+                //     }
+                // }
                 // this.formLabelAlign.tag=this.selectedOptions[0][1]
                 this.postRequest("/publish/", this.formLabelAlign).then(resp => {
                     if (resp) {
                         console.log(resp)
+                        window.sessionStorage.removeItem("question");
                         this.$router.replace("/index")
                     }
                 })
             } else {
                 this.formLabelAlign.id = this.question.id;
+                // for (let i = 0; i < this.selectedOptions.length; i++) {
+                //     if (i !== this.selectedOptions.length - 1) {
+                //         this.formLabelAlign.tag += this.selectedOptions[i][1] + ',';
+                //     }else{
+                //         this.formLabelAlign.tag += this.selectedOptions[i][1];
+                //     }
+                // }
                 this.putRequest("/publish/update/", this.formLabelAlign).then(resp => {
                     if (resp) {
                         // console.log(resp)
+                        window.sessionStorage.removeItem("question");
                         this.$router.replace("/index")
                     }
                 })
@@ -221,5 +239,16 @@ export default {
 
 .e_input .el-input__inner {
     text-align: left;
+}
+
+.text_desc {
+    font-size: 20px;
+    font-family: 黑体, serif;
+    color: #0f0f0f;
+}
+.text_desc2 {
+    font-size: 15px;
+    font-family: 黑体, serif;
+    color: gray;
 }
 </style>

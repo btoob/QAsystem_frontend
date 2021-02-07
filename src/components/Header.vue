@@ -2,9 +2,9 @@
 <div class="header">
 
             <div style="display: flex; align-items: baseline">
-                <router-link to="/index" style="text-decoration: none">
-                    <div class="title">问答社区</div>
-                </router-link>
+<!--                <router-link to="/index" style="text-decoration: none">-->
+                <el-link @click="goIndex" :underline="false"><div class="title">问答社区</div></el-link>
+<!--                </router-link>-->
                 <div style="display: flex; align-items: baseline;
                     vertical-align: mathematical;">
                     <el-input v-model="inputSearch" placeholder="" size="medium"
@@ -13,10 +13,10 @@
                 </div>
             </div>
             <div>
-                <router-link to="/publish">
+                <el-link @click="goPublish" :underline="false" >
                     <el-button icon="el-icon-edit" type="text"
-                               style="color: #000000;width: auto;height: auto;margin-right: 25px"
-                               size="normal" @click="goChat">发布</el-button></router-link>
+                               style="color: #000000;width: auto;height: auto;margin-right: 25px;margin-bottom: 2px"
+                               size="normal">发布</el-button></el-link>
                 <router-link to="/profile">
                     <el-button type="text"
                                style="color: #000000;width: auto;height: auto;margin-right: 25px"
@@ -57,6 +57,13 @@
             }
         },
         methods:{
+            goPublish(){
+                window.sessionStorage.removeItem("question");
+                this.$router.replace("/publish");
+            },
+            goIndex(){
+                this.$router.replace("/index")
+            },
             carryInput(){
                 // window.sessionStorage.setItem("searchInput", this.inputSearch);
                 //调用index页面的方法

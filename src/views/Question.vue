@@ -9,12 +9,13 @@
                     <div style="margin-left: 10px">
                         <i class="el-icon-files" style="margin-bottom: 15px" >   {{question.title}}</i> <br>
                         <span class="text_desc">
-                            <span>{{question.commentCount}}</span> 个回复 | <span>{{question.viewCount}}</span> 次浏览 | 发布时间: <span>{{question.updateTime}} | <router-link to="/publish" v-if="question.userId===user.id">
+                            <span>{{question.commentCount}}</span> 个回复 | <span>{{question.viewCount}}</span> 次浏览 | 发布时间: <span>{{question.updateTime}}
+                            <el-link  :underline="false" v-if="question.userId===user.id">|
                         <el-button icon="el-icon-edit-outline" type="text"
                                    style="padding-top: 0;padding-bottom: 0; color:
                                    #000000;width: auto;height: auto;font-family: 黑体,serif ;color: gray;
-                                   align-items: center"
-                                   size="normal" @click="goEdit">编辑</el-button></router-link></span>
+                                   align-items: center;font-size: 13px;margin-bottom: 5px"
+                                   size="normal" @click="goEdit">编辑</el-button></el-link></span>
 
                         </span>
                     </div>
@@ -179,6 +180,9 @@ export default {                                //注入App里的reload方法
         next()
     },
     methods:{
+        goEdit(){
+            this.$router.replace("/publish");
+        },
         goDetail(related){
             this.getRequest("question/"+related.id).then(resp=>{
                 if (resp){
