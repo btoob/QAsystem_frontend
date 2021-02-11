@@ -20,7 +20,7 @@ error=>{
     }else if(error.response.status===403){
         Message.error({message:"权限不足，请联系管理员"})
     }else if(error.response.status===401){
-        Message.error({message:"尚未登陆，请登录"})
+        Message.error({message:"尚未登陆，请登录aaaaaaa"})
         router.replace("/")
     }else {
         if(error.response.data.msg){

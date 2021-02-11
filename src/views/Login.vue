@@ -41,7 +41,7 @@
                     <label>
                         <span>用户名</span>
                         <el-form-item prop="username">
-                            <el-input type="text" v-model="signForm.name" />
+                            <el-input type="text" v-model="signForm.username" />
                         </el-form-item>
                     </label>
                     <label>
@@ -65,6 +65,7 @@
 </template>
 <script>
 import "@/static/css/style.css"
+import {Message} from "element-ui";
 
 export default {
     name: "Login",
@@ -85,9 +86,9 @@ export default {
                 password:"123",
             },
             signForm:{
-                name:"小明",
-                email:'123@qq.com',
-                password:'123',
+                username:"",
+                email:'',
+                password:'',
             }
 
         }
@@ -116,6 +117,7 @@ export default {
         submitRegistry(){
             this.postRequest("/signUp", this.signForm).then(resp=>{
                 if (resp){
+                    Message.success({message:resp.msg})
                     this.$refs.content.classList.toggle('s--signup')
                 }
             })
