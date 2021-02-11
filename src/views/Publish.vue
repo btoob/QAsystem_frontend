@@ -35,7 +35,7 @@
                 </el-main>
                 <el-aside width="300px" class="indexAside">
                     <div>
-                        <div class="text_desc" style="margin-bottom: 10px">问题发起指南</div>
+                        <div class="text_desc3" style="margin-bottom: 10px">问题发起指南</div>
                         <div class="text_desc2">
                             <div style="margin-bottom: 5px">• 问题标题: 请用<span style="color: red">精简</span>的语言描述您发布的问题，不超过25字</div>
                             <div style="margin-bottom: 5px">• 问题补充: 详细补充您的问题内容，并确保问题描述清晰直观, 并提供一些相关的资料：</div>
@@ -241,7 +241,7 @@ export default {
     text-align: left;
 }
 
-.text_desc {
+.text_desc3 {
     font-size: 20px;
     font-family: 黑体, serif;
     color: #0f0f0f;
