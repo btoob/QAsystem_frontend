@@ -19,6 +19,10 @@
                     <el-button icon="el-icon-edit" type="text"
                                style="color: #000000;width: auto;height: auto;margin-right: 25px;margin-bottom: 2px"
                                size="normal">发布</el-button></el-link>
+                <el-link v-if="user===null" @click="goLogin" :underline="false" >
+                    <el-button icon="el-icon-user" type="text"
+                               style="color: #000000;width: auto;height: auto;margin-right: 25px;margin-bottom: 2px"
+                               size="normal">登录</el-button></el-link>
                 <router-link to="/profile" v-if="user!==null">
                     <el-button type="text"
                                style="color: #000000;width: auto;height: auto;margin-right: 25px"
@@ -60,11 +64,29 @@
         },
         methods:{
             goPublish(){
-                window.sessionStorage.removeItem("question");
-                this.$router.replace("/publish");
+                if (this.user!==null){
+                    window.sessionStorage.removeItem("question");
+                    this.$router.replace("/publish");
+                }else{
+                    this.$confirm('此操作需要登录, 是否跳转到登录页面?', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    }).then(() => {
+                        this.$router.replace("/login");
+                    }).catch(() => {
+                        this.$message({
+                            type: 'info',
+                            message: '已取消操作'
+                        });
+                    });
+                }
             },
             goIndex(){
                 this.$router.replace("/")
+            },
+            goLogin(){
+                this.$router.replace("/login")
             },
             carryInput(){
                 // window.sessionStorage.setItem("searchInput", this.inputSearch);
