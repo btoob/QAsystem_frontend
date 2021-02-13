@@ -50,7 +50,9 @@
                     <div>热门标签</div>
                     <div style="display:flex;margin-top: 10px">
                         <div style="margin-right: 8px" v-for="(tag, i) in hotTags">
-                            <el-tag type="warning" size="mini"><el-link  @click="initQuestionByTag(tag)">{{ tag }}</el-link></el-tag>
+                            <el-tag type="warning" size="mini">
+                                <el-link @click="initQuestionByTag(tag)">{{ tag }}</el-link>
+                            </el-tag>
                         </div>
                     </div>
                     <el-divider></el-divider>
@@ -67,6 +69,7 @@
 import Header from "../components/Header";
 import Footer from "@/components/Footer";
 import func from "@/utils/func";
+
 export default {
     name: "Index",
     data() {
@@ -79,7 +82,7 @@ export default {
             sectionName: '我的问题',
             notificationNum: 0,
             searchInput: '',
-            hotTags:[],
+            hotTags: [],
 
         }
     },
@@ -98,8 +101,8 @@ export default {
         // this.initHotTags();
         // this.initNotificationNum();
         //Header页面调用本页面的方法   searchInput为Header中传过来的参数
-        func.$on("demo",(searchInput)=>{
-            this.searchInput=searchInput;
+        func.$on("demo", (searchInput) => {
+            this.searchInput = searchInput;
             this.initQuestions();
         })
     },
@@ -108,22 +111,21 @@ export default {
         next()
     },
     methods: {
-        initQuestionByTag(tag){
-
-            this.getRequest("question/tag/"+tag).then(resp=>{
-                if (resp){
-                    this.questions=[]
-                    this.total='0'
-                    this.questions=resp.data;
-                    this.total=resp.total;
+        initQuestionByTag(tag) {
+            this.getRequest("question/tag/" + tag).then(resp => {
+                if (resp) {
+                    this.questions = []
+                    this.total = '0'
+                    this.questions = resp.data;
+                    this.total = resp.total;
                 }
 
             })
         },
-        initHotTags(){
-            this.getRequest("question/hotTags").then(resp=>{
-                if (resp){
-                    this.hotTags=resp
+        initHotTags() {
+            this.getRequest("question/hotTags").then(resp => {
+                if (resp) {
+                    this.hotTags = resp
                 }
             })
         },
@@ -150,7 +152,7 @@ export default {
             // this.searchInput = window.sessionStorage.getItem("searchInput");
             // window.sessionStorage.removeItem("searchInput");
             if (this.searchInput !== null) {
-                url+="&search="+this.searchInput;
+                url += "&search=" + this.searchInput;
                 console.log(url)
             }
             this.getRequest(url).then(resp => {
@@ -164,7 +166,6 @@ export default {
         goDetail(question) {
             this.getRequest("question/" + question.id).then(resp => {
                 if (resp) {
-                    console.log(resp)
                     window.sessionStorage.setItem("question", JSON.stringify(resp));
                     this.$router.replace("/question")
                 }

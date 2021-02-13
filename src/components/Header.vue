@@ -23,7 +23,7 @@
                                size="normal" @click="goNotification">通知
                         <span class="noticeNum">{{notificationNum}}</span>
                     </el-button></router-link>
-                <el-dropdown class="userInfo" @command="commandHandler" trigger="click" style="cursor: pointer;vertical-align:baseline">
+                <el-dropdown v-if="user!==null" class="userInfo" @command="commandHandler" trigger="click" style="cursor: pointer;vertical-align:baseline">
                         <span class="el-dropdown-link">
                         {{ user.name}}<i class="el-icon-arrow-down el-icon--right"></i>
                             <el-image referrerPolicy="no-referrer" class="imgCircle"
@@ -62,7 +62,7 @@
                 this.$router.replace("/publish");
             },
             goIndex(){
-                this.$router.replace("/index")
+                this.$router.replace("/")
             },
             carryInput(){
                 // window.sessionStorage.setItem("searchInput", this.inputSearch);
@@ -88,7 +88,7 @@
                     }).then(() => {
                         window.sessionStorage.removeItem("user");
                         window.sessionStorage.removeItem("question");
-                        this.$router.replace("/");
+                        this.$router.replace("/login");
                     }).catch(() => {
                         this.$message({
                             type: 'info',

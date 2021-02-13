@@ -105,7 +105,7 @@ export default {
                             // alert(JSON.stringify(resp));
                             console.log(resp)
                             window.sessionStorage.setItem("user", JSON.stringify(resp.object));
-                            this.$router.replace("/index")
+                            this.$router.replace("/")
                         }
                     })
                 } else {
