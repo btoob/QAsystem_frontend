@@ -7,7 +7,9 @@
 <!--                </router-link>-->
                 <div style="display: flex; align-items: baseline;
                     vertical-align: mathematical;">
-                    <el-input v-model="inputSearch" placeholder="" size="medium"
+                    <el-input v-model="inputSearch" placeholder="可以直接回车搜索..." size="medium" @keydown.enter.native="carryInput"
+                              clearable
+                              @clear="carryInput"
                               style="margin-right: 8px;width: 200px"></el-input>
                     <el-button size="medium" type="info" icon="el-icon-search" style="width: auto;height: auto" @click="carryInput">搜索</el-button>
                 </div>
@@ -17,7 +19,7 @@
                     <el-button icon="el-icon-edit" type="text"
                                style="color: #000000;width: auto;height: auto;margin-right: 25px;margin-bottom: 2px"
                                size="normal">发布</el-button></el-link>
-                <router-link to="/profile">
+                <router-link to="/profile" v-if="user!==null">
                     <el-button type="text"
                                style="color: #000000;width: auto;height: auto;margin-right: 25px"
                                size="normal" @click="goNotification">通知
