@@ -47,6 +47,7 @@
                             <div style="margin-bottom: 5px;margin-left: 5px">- 注意阅读格式友好，代码和异常信息请用代码标签格式化张贴；</div>
                             <div style="margin-bottom: 5px">• 选择标签: 选择一个或者多个合适的标签，不超过10个字</div>
                         </div>
+                        <a-icon type="api" />
                     </div>
                 </el-aside>
             </el-container>
@@ -60,7 +61,7 @@
 <script>
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import axios from 'axios'
+import axios from 'axios';
 export default {
     name: "Publish",
     data() {

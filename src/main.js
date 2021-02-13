@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
+import Antd from 'ant-design-vue'
+import 'ant-design-vue/dist/antd.css'
 import router from './router'
 import App from './App.vue'
 
@@ -20,6 +22,7 @@ Vue.prototype.postRequest=postRequest;
 Vue.config.productionTip = false
 Vue.config.devtools = true
 Vue.use(ElementUI);
+Vue.use(Antd);
 
 import mavonEditor from "mavon-editor";
 import "mavon-editor/dist/css/index.css";
