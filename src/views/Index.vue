@@ -130,11 +130,13 @@ export default {
             })
         },
         initNotificationNum() {
-            this.getRequest("notification/notificationNum/" + this.user.id).then(resp => {
-                if (resp) {
-                    this.notificationNum = resp.object;
-                }
-            })
+            if (this.user !== null) {
+                this.getRequest("notification/notificationNum/" + this.user.id).then(resp => {
+                    if (resp) {
+                        this.notificationNum = resp.object;
+                    }
+                })
+            }
         },
         goNotification() {
             this.sectionName = '最新回复';

@@ -151,4 +151,7 @@
     width: auto;
     height: auto;
 }
+.el-input__suffix{
+    top: 4px;
+}
 </style>

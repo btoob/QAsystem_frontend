@@ -10,7 +10,7 @@
                         <i class="el-icon-files" style="margin-bottom: 15px" >   {{question.title}}</i> <br>
                         <span class="text_desc">
                             <span>{{question.commentCount}}</span> 个回复 | <span>{{question.viewCount}}</span> 次浏览 | 发布时间: <span>{{question.updateTime}}
-                            <el-link  :underline="false" v-if="question.userId===user.id">|
+                            <el-link  :underline="false" v-if="user!=null && question.userId===user.id">|
                         <el-button icon="el-icon-edit-outline" type="text"
                                    style="padding-top: 0;padding-bottom: 0; color:
                                    #000000;width: auto;height: auto;font-family: 黑体,serif ;color: gray;
@@ -72,14 +72,12 @@
                             <div v-show="showSecondaryComments===true">在这里二级评论
 
                             </div>
-                            <el-divider style="margin-top: 3px"></el-divider>
-
-
+                            <el-divider style="margin-top: 3px;width: auto"></el-divider>
                         </el-row>
                     </div>
 
                     <!--添加评论-->
-                    <div style=" display: flex;align-items: flex-start;margin-top: 15px">
+                    <div v-if="user!==null" style=" display: flex;align-items: flex-start;margin-top: 15px">
                         <el-image referrerPolicy="no-referrer" class="imgCircle"
                                   style="width: 40px; height: 40px"
                                   :src="user.userFace"
@@ -88,7 +86,7 @@
                             <span style="font-size: 10px;font-family: 黑体,serif ;color: gray;">{{ user.name }}</span> <br>
                         </div>
                     </div>
-                    <el-form :model="commentForm">
+                    <el-form v-if="user!==null" :model="commentForm">
                         <el-form-item>
                             <el-input style="margin-top: 10px"
                                       type="textarea"
@@ -103,6 +101,7 @@
                             </div>
                         </el-form-item>
                     </el-form>
+                    <div v-else style="display: flex;justify-content: center">回复问题请先<router-link to="/login">登录</router-link></div>
 
                 </el-main>
                 <el-aside width="300px" class="indexAside">
@@ -167,7 +166,7 @@ export default {                                //注入App里的reload方法
         Footer,
     },
     mounted() {
-        if (this.question.userId===this.user.id){
+        if (this.user!==null && this.question.userId===this.user.id){
             this.canEdit=true;
         }
         this.initComments();
