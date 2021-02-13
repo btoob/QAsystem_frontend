@@ -143,4 +143,12 @@
     color: gray;
     margin-right: 20px;
 }
+.el-message-box__headerbtn{
+    width: auto;
+    height: auto;
+}
+.el-button{
+    width: auto;
+    height: auto;
+}
 </style>
