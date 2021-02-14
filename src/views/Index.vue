@@ -160,6 +160,10 @@ export default {
             this.getRequest(url).then(resp => {
                 if (resp) {
                     // alert(JSON.stringify(resp))
+                    //将问题中的tags由字符串转化为数组
+                    for (let i = 0; i < resp.data.length; i++) {
+                        resp.data[i].tag = resp.data[i].tag.split(",")
+                    }
                     this.questions = resp.data;
                     this.total = resp.total;
                 }
@@ -168,6 +172,8 @@ export default {
         goDetail(question) {
             this.getRequest("question/" + question.id).then(resp => {
                 if (resp) {
+                    console.log(resp)
+                    resp.tag = resp.tag.split(",")
                     window.sessionStorage.setItem("question", JSON.stringify(resp));
                     this.$router.replace("/question")
                 }

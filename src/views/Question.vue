@@ -72,7 +72,7 @@
                             <div v-show="showSecondaryComments===true">在这里二级评论
 
                             </div>
-                            <el-divider style="margin-top: 3px;width: auto"></el-divider>
+                            <el-divider style="margin-top: 3px"></el-divider>
                         </el-row>
                     </div>
 

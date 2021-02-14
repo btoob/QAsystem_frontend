@@ -9,14 +9,14 @@
                     <i class="el-icon-document-add" style="margin-bottom: 10px"> 发起</i>
                     <el-divider></el-divider>
                     <div>
-                        <el-form label-position="top" label-width="40px" :model="formLabelAlign">
+                        <el-form label-position="top" label-width="80px" :model="formLabelAlign">
                             <el-form-item label="问题标题(简单扼要)" class="item">
                                 <el-input v-model="formLabelAlign.title" style="width: 50%;" class="e_input"></el-input>
                             </el-form-item>
                             <el-form-item label="问题补充 (必填，请参照右侧提示):" class="item">
 <!--                                <el-input :autosize="{ minRows: 4, maxRows: 8}" v-model="formLabelAlign.description"-->
 <!--                                          type="textarea"></el-input>-->
-                                <mavon-editor :ishljs = "true" v-model="formLabelAlign.description" ref="md" @imgAdd="imgAdd" @imgDel="imgDel"/>
+                                <mavon-editor style="margin-top: 4px;margin-right: 10px" :ishljs = "true" v-model="formLabelAlign.description" ref="md" @imgAdd="imgAdd" @imgDel="imgDel"/>
                             </el-form-item>
                             <el-form-item label="添加标签:" class="item">
                                 <el-cascader :show-all-levels="false" v-model="selectedOptions"
@@ -154,14 +154,6 @@ export default {
             }
             if (this.buttonValue === '确认发起') {
                 console.log(this.selectedOptions)
-                // for (let i = 0; i < this.selectedOptions.length; i++) {
-                //     if (i !== this.selectedOptions.length - 1) {
-                //         this.formLabelAlign.tag += this.selectedOptions[i][1] + ',';
-                //     }else{
-                //         this.formLabelAlign.tag += this.selectedOptions[i][1];
-                //     }
-                // }
-                // this.formLabelAlign.tag=this.selectedOptions[0][1]
                 this.postRequest("/publish/", this.formLabelAlign).then(resp => {
                     if (resp) {
                         console.log(resp)
@@ -171,13 +163,6 @@ export default {
                 })
             } else {
                 this.formLabelAlign.id = this.question.id;
-                // for (let i = 0; i < this.selectedOptions.length; i++) {
-                //     if (i !== this.selectedOptions.length - 1) {
-                //         this.formLabelAlign.tag += this.selectedOptions[i][1] + ',';
-                //     }else{
-                //         this.formLabelAlign.tag += this.selectedOptions[i][1];
-                //     }
-                // }
                 this.putRequest("/publish/update/", this.formLabelAlign).then(resp => {
                     if (resp) {
                         // console.log(resp)
@@ -217,7 +202,13 @@ export default {
     width: 80%;
     margin: 12px 0;
 }
-
+/deep/ .item .el-form-item__label{
+    text-align: left;
+    float: none;
+}
+/deep/ .el-form-item__content{
+    width: 90%;
+}
 .el-icon-document-add {
     font-size: 25px;
     font-family: 黑体, serif;
