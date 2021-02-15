@@ -155,7 +155,7 @@ export default {
             // window.sessionStorage.removeItem("searchInput");
             if (this.searchInput !== null) {
                 url += "&search=" + this.searchInput;
-                console.log(url)
+                // console.log(url)
             }
             this.getRequest(url).then(resp => {
                 if (resp) {
@@ -170,6 +170,7 @@ export default {
             })
         },
         goDetail(question) {
+            //可以直接使用参数question, 不用再去调接口查, 后端将增加浏览数的操作放在了这个接口里面
             this.getRequest("question/" + question.id).then(resp => {
                 if (resp) {
                     console.log(resp)

@@ -186,6 +186,7 @@ export default {                                //注入App里的reload方法
             this.getRequest("question/"+related.id).then(resp=>{
                 if (resp){
                     console.log(resp)
+                    resp.tag = resp.tag.split(",")
                     window.sessionStorage.setItem("question", JSON.stringify(resp));
                     this.$router.go(0);
                 }
