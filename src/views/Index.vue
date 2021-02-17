@@ -7,8 +7,16 @@
 
             <el-container class="indexContainer">
                 <el-main class="indexMain">
-                    <i class="el-icon-files" style="margin-bottom: 15px"> 发现</i>
-                    <el-divider></el-divider>
+                    <i class="el-icon-files" style="margin-bottom: 12px;margin-top: 10px"> 发现</i>
+
+                    <el-menu default-active="1" class="el-menu-demo" mode="horizontal" style="float: right;">
+                        <el-menu-item index="1" @click="initNewQuestions">最新</el-menu-item>
+                        <el-menu-item index="2" @click="initHotQuestions">最热</el-menu-item>
+                        <el-menu-item index="3" @click="initZeroQuestions">消灭零回复</el-menu-item>
+                    </el-menu>
+
+                    <el-divider style="margin-top: 5px"></el-divider>
+
                     <el-row v-for="(question, index) in questions" :key="index">
                         <div style=" display: flex;align-items: flex-start">
                             <!--                            <el-avatar size="large" shape="square" :src="user.userFace" referrerPolicy="no-referrer"></el-avatar>-->
