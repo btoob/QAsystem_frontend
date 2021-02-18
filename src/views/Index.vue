@@ -10,9 +10,9 @@
                     <i class="el-icon-files" style="margin-bottom: 12px;margin-top: 10px"> 发现</i>
 
                     <el-menu default-active="1" class="el-menu-demo" mode="horizontal" style="float: right;">
-                        <el-menu-item index="1" @click="initNewQuestions">最新</el-menu-item>
-                        <el-menu-item index="2" @click="initHotQuestions">最热</el-menu-item>
-                        <el-menu-item index="3" @click="initZeroQuestions">消灭零回复</el-menu-item>
+                        <el-menu-item index="1" @click="initNewQuestions()">最新</el-menu-item>
+                        <el-menu-item index="2" @click="initHotQuestions()">最热</el-menu-item>
+                        <el-menu-item index="3" @click="initZeroQuestions()">消灭零回复</el-menu-item>
                     </el-menu>
 
                     <el-divider style="margin-top: 5px"></el-divider>
@@ -91,6 +91,7 @@ export default {
             notificationNum: 0,
             searchInput: '',
             hotTags: [],
+            questionType: 0,
 
         }
     },
@@ -99,7 +100,7 @@ export default {
         Footer,
     },
     created() {
-        this.initQuestions();
+        this.initQuestions("最新");
         this.initHotTags();
         this.initNotificationNum();
     },
@@ -111,7 +112,7 @@ export default {
         //Header页面调用本页面的方法   searchInput为Header中传过来的参数
         func.$on("demo", (searchInput) => {
             this.searchInput = searchInput;
-            this.initQuestions();
+            this.initQuestions("最新");
         })
     },
     beforeRouteLeave(to, from, next) {
@@ -151,31 +152,77 @@ export default {
         },
         handleCurrentChange(currentPage) {
             this.page = currentPage;
-            this.initQuestions();
+            if (this.questionType === 0) {
+                this.initQuestions("最新");
+            }else if (this.questionType===1){
+                this.initQuestions("最热");
+            }else if(this.questionType===2){
+                this.initQuestions("零回复");
+            }
         },
         handleSizeChange(currentSize) {
             this.size = currentSize;
-            this.initQuestions();
-        },
-        initQuestions() {
-            let url = "question/?page=" + this.page + "&size=" + this.size;
-            // this.searchInput = window.sessionStorage.getItem("searchInput");
-            // window.sessionStorage.removeItem("searchInput");
-            if (this.searchInput !== null) {
-                url += "&search=" + this.searchInput;
-                // console.log(url)
+            if (this.questionType === 0) {
+                this.initQuestions("最新");
+            }else if (this.questionType===1){
+                this.initQuestions("最热");
+            }else if(this.questionType===2){
+                this.initQuestions("零回复");
             }
-            this.getRequest(url).then(resp => {
-                if (resp) {
-                    // alert(JSON.stringify(resp))
-                    //将问题中的tags由字符串转化为数组
-                    for (let i = 0; i < resp.data.length; i++) {
-                        resp.data[i].tag = resp.data[i].tag.split(",")
-                    }
-                    this.questions = resp.data;
-                    this.total = resp.total;
+        },
+        initNewQuestions() {
+            this.questionType = 0
+            this.initQuestions("最新");
+        },
+        initHotQuestions() {
+            this.questionType = 1
+            this.initQuestions("最热");
+        },
+        initZeroQuestions() {
+            this.questionType = 2
+            this.initQuestions("零回复");
+        },
+        initQuestions(questionType) {
+            if (questionType === "最新") {
+                let url = "question/?page=" + this.page + "&size=" + this.size;
+                // this.searchInput = window.sessionStorage.getItem("searchInput");
+                // window.sessionStorage.removeItem("searchInput");
+                if (this.searchInput !== null) {
+                    url += "&search=" + this.searchInput;
+                    // console.log(url)
                 }
-            })
+                this.getRequest(url).then(resp => {
+                    if (resp) {
+                        // alert(JSON.stringify(resp))
+                        //将问题中的tags由字符串转化为数组
+                        for (let i = 0; i < resp.data.length; i++) {
+                            resp.data[i].tag = resp.data[i].tag.split(",")
+                        }
+                        this.questions = resp.data;
+                        this.total = resp.total;
+                    }
+                })
+            } else if (questionType === "最热") {
+                this.getRequest("/question/hot/?page=" + this.page + "&size=" + this.size).then(resp => {
+                    if (resp) {
+                        for (let i = 0; i < resp.data.length; i++) {
+                            resp.data[i].tag = resp.data[i].tag.split(",")
+                        }
+                        this.questions = resp.data;
+                        this.total = resp.total;
+                    }
+                })
+            } else if (questionType === "零回复") {
+                this.getRequest("/question/noReply/?page=" + this.page + "&size=" + this.size).then(resp => {
+                    if (resp) {
+                        for (let i = 0; i < resp.data.length; i++) {
+                            resp.data[i].tag = resp.data[i].tag.split(",")
+                        }
+                        this.questions = resp.data;
+                        this.total = resp.total;
+                    }
+                })
+            }
         },
         goDetail(question) {
             //可以直接使用参数question, 不用再去调接口查, 后端将增加浏览数的操作放在了这个接口里面
