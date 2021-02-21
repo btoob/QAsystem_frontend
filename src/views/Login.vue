@@ -102,8 +102,6 @@ export default {
                 if (valid) {
                     this.postKeyValueRequest("/doLogin", this.loginForm).then(resp=>{
                         if (resp){
-                            // alert(JSON.stringify(resp));
-                            console.log(resp)
                             window.sessionStorage.setItem("user", JSON.stringify(resp.object));
                             this.$router.replace("/")
                         }

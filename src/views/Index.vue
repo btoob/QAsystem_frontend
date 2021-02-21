@@ -53,7 +53,19 @@
                 <el-aside width="300px" class="indexAside">
                     <span style="font-family: 黑体,serif;color: #0f0f0f">给点钱吧</span>
                     <img width="222" height="246" src="../static/images/weixin.png">
-                    <img width="222" height="246" src="../static/images/zhifubao.png">
+                    <el-divider></el-divider>
+                    <div>
+                        <el-row v-for="(secKillGood, index) in secKillGoods" :key="index">
+                            <div style="display: flex;justify-content: center">
+                                这里有
+                                <span style="color: red;margin-right: 5px;margin-left: 5px;cursor: pointer"
+                                      @click="saveOrder(secKillGood)">
+                                    {{ secKillGood.name }}
+                                </span>
+                                快抢
+                            </div>
+                        </el-row>
+                    </div>
                     <el-divider></el-divider>
                     <div>热门标签</div>
                     <div style="display:flex;margin-top: 10px">
@@ -92,7 +104,7 @@ export default {
             searchInput: '',
             hotTags: [],
             questionType: 0,
-
+            secKillGoods: [],
         }
     },
     components: {
@@ -103,6 +115,7 @@ export default {
         this.initQuestions("最新");
         this.initHotTags();
         this.initNotificationNum();
+        this.initSecKillGoods();
     },
     mounted() {
         // this.initQuestions();
@@ -120,6 +133,41 @@ export default {
         next()
     },
     methods: {
+        saveOrder(secKillGood) {
+            if (this.user === null) {
+                this.$confirm('此操作需要登录, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    window.sessionStorage.removeItem("user")
+                    window.sessionStorage.removeItem("question");
+                    this.$router.replace("/login");
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消操作'
+                    });
+                });
+            } else {
+                this.getRequest("seckill/saveOrder/?id=" + secKillGood.id + "&userId=" + this.user.id).then(resp => {
+                    if (resp) {
+                        this.$message({
+                            message: resp.msg,
+                            center: true,
+                            duration: 6000,
+                        });
+                    }
+                })
+            }
+        },
+        initSecKillGoods() {
+            this.getRequest("seckill/").then(resp => {
+                if (resp) {
+                    this.secKillGoods = resp;
+                }
+            })
+        },
         initQuestionByTag(tag) {
             this.getRequest("question/tag/" + tag).then(resp => {
                 if (resp) {
@@ -154,9 +202,9 @@ export default {
             this.page = currentPage;
             if (this.questionType === 0) {
                 this.initQuestions("最新");
-            }else if (this.questionType===1){
+            } else if (this.questionType === 1) {
                 this.initQuestions("最热");
-            }else if(this.questionType===2){
+            } else if (this.questionType === 2) {
                 this.initQuestions("零回复");
             }
         },
@@ -164,9 +212,9 @@ export default {
             this.size = currentSize;
             if (this.questionType === 0) {
                 this.initQuestions("最新");
-            }else if (this.questionType===1){
+            } else if (this.questionType === 1) {
                 this.initQuestions("最热");
-            }else if(this.questionType===2){
+            } else if (this.questionType === 2) {
                 this.initQuestions("零回复");
             }
         },
