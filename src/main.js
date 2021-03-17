@@ -3,6 +3,15 @@ import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 // import Antd from 'ant-design-vue'     按需引入
 import {Icon} from 'ant-design-vue';
+import {Comment} from "ant-design-vue";
+import {List} from "ant-design-vue";
+import {Avatar} from "ant-design-vue";
+import {Form} from "ant-design-vue";
+import {Button} from "ant-design-vue";
+import {Input} from "ant-design-vue";
+import {Tooltip} from "ant-design-vue";
+
+
 import 'ant-design-vue/dist/antd.css'
 import router from './router'
 import App from './App.vue'
@@ -25,6 +34,13 @@ Vue.config.devtools = true
 Vue.use(ElementUI);
 // Vue.use(Antd);    会干扰element ui样式,
 Vue.use(Icon)
+Vue.use(Comment)
+Vue.use(List)
+Vue.use(Avatar)
+Vue.use(Form)
+Vue.use(Button)
+Vue.use(Input)
+Vue.use(Tooltip)
 
 import mavonEditor from "mavon-editor";
 import "mavon-editor/dist/css/index.css";
