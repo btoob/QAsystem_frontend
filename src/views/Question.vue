@@ -188,12 +188,15 @@ export default {                                //注入App里的reload方法
             this.submitting = true;
             this.commentForm.parentId = this.question.id;
             this.commentForm.commentator = this.user.id;
-            this.postRequest("/comment/", this.commentForm).then(resp => {
-                if (resp) {
-                    this.initComments();
-                    this.commentForm.content = '';
-                }
-            })
+            setTimeout(()=>{
+                this.submitting = false;
+                this.postRequest("/comment/", this.commentForm).then(resp => {
+                    if (resp) {
+                        this.initComments();
+                        this.commentForm.content = '';
+                    }
+                })
+            },1000)
         },
         goEdit() {
             this.$router.replace("/publish");
