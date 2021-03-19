@@ -225,10 +225,16 @@ export default {                                //注入App里的reload方法
         },
         like(comment) {
             comment.likeCount+=1;
+            if (comment.action==='disliked'){
+                comment.dislikeCount-=1;
+            }
             comment.action = 'liked';
         },
         dislike(comment) {
             comment.dislikeCount+=1;
+            if (comment.action==='liked'){
+                comment.likeCount-=1;
+            }
             comment.action = 'disliked';
         },
         initComments() {
