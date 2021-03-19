@@ -43,21 +43,21 @@
                                     <template slot="actions">
                                         <span key="comment-basic-like">
                                             <a-tooltip title="Like">
-                                              <a-icon type="like" :theme="action === 'liked' ? 'filled' : 'outlined'" @click="like"/>
+                                              <a-icon type="like" :theme="item.action === 'liked' ? 'filled' : 'outlined'" @click="like(item)"/>
                                             </a-tooltip>
                                             <span style="padding-left: 3px;cursor: auto">
-                                              {{ likes }}
+                                              {{ item.likeCount }}
                                             </span>
                                         </span>
                                         <span key="comment-basic-dislike">
                                             <a-tooltip title="Dislike">
                                             <a-icon
                                               type="dislike"
-                                              :theme="action === 'disliked' ? 'filled' : 'outlined'"
-                                              @click="dislike"/>
+                                              :theme="item.action === 'disliked' ? 'filled' : 'outlined'"
+                                              @click="dislike(item)"/>
                                             </a-tooltip>
                                             <span style="padding-left: 3px;cursor: auto">
-                                            {{ dislikes }}
+                                            {{ item.dislikeCount  }}
                                             </span>
                                         </span>
                                         <span key="comment-basic-reply-to">Reply to</span>
@@ -223,19 +223,21 @@ export default {                                //注入App里的reload方法
                 }
             })
         },
-        like() {
-            this.likes = 1;
-            this.dislikes = 0;
-            this.action = 'liked';
+        like(comment) {
+            comment.likeCount+=1;
+            comment.action = 'liked';
         },
-        dislike() {
-            this.likes = 0;
-            this.dislikes = 1;
-            this.action = 'disliked';
+        dislike(comment) {
+            comment.dislikeCount+=1;
+            comment.action = 'disliked';
         },
         initComments() {
             this.getRequest("/comment/" + this.question.id).then(resp => {
                 if (resp) {
+                    //加个action方面后面点赞时图标样式改变
+                    for (let i = 0; i < resp.length; i++) {
+                        resp[i].action=null;
+                    }
                     console.log(resp)
                     this.comments = resp;
                 }
