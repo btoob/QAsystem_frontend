@@ -178,9 +178,18 @@ export default {                                //注入App里的reload方法
         if (this.canEdit === false && window.sessionStorage.getItem("question")) {
             window.sessionStorage.removeItem("question");
         }
-        next()
+        next();
     },
     methods: {
+        updateThumbs(comment){
+            this.putRequest("/comment/"+comment.id+"?newLikeCount="+comment.likeCount+"&newDislikeCount="+comment.dislikeCount).then(
+                resp=>{
+                    if (resp){
+                        //do nothing
+                    }
+                }
+            )
+        },
         handleChange(e) {
             this.commentForm.content = e.target.value;
         },
@@ -224,18 +233,37 @@ export default {                                //注入App里的reload方法
             })
         },
         like(comment) {
+            if(comment.action==='liked'){
+                this.$message({
+                    showClose: true,
+                    message: '您已经点过赞了',
+                    type: 'warning'
+                });
+                return;
+            }
             comment.likeCount+=1;
             if (comment.action==='disliked'){
                 comment.dislikeCount-=1;
             }
             comment.action = 'liked';
+            this.updateThumbs(comment);
+
         },
         dislike(comment) {
+            if(comment.action==='disliked'){
+                this.$message({
+                    showClose: true,
+                    message: '您已经点过赞了',
+                    type: 'warning'
+                });
+                return;
+            }
             comment.dislikeCount+=1;
             if (comment.action==='liked'){
                 comment.likeCount-=1;
             }
             comment.action = 'disliked';
+            this.updateThumbs(comment);
         },
         initComments() {
             this.getRequest("/comment/" + this.question.id).then(resp => {
