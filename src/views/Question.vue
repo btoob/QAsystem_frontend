@@ -60,20 +60,37 @@
                                             {{ item.dislikeCount  }}
                                             </span>
                                         </span>
-                                        <span key="comment-basic-reply-to">Reply to</span>
+                                        <span @click="secondaryComment">Reply to</span>
                                     </template>
                                     <p slot="content">
                                         {{ item.content }}
                                     </p>
+                                    <div >
+                                        <a-comment v-if="showSecondaryComments">
+                                            <div slot="content">
+                                                <a-form-item>
+                                                    <a-textarea style="width: 700px" :rows="2" :value="value" @change="secondCommentChange"/>
+                                                </a-form-item>
+                                                <a-form-item>
+                                                    <a-button html-type="submit" :loading="submitting" type="primary" style="width: auto"
+                                                              @click="secondCommentSubmit">
+                                                        Add Comment
+                                                    </a-button>
+                                                </a-form-item>
+                                            </div>
+                                        </a-comment>
+                                    </div>
                                     <a-tooltip slot="datetime"
                                                :title="moment(item.createTime).format('YYYY-MM-DD HH:mm:ss')">
                                         <span>{{ moment(item.createTime).fromNow() }}</span>
                                     </a-tooltip>
-
                                 </a-comment>
+
                             </a-list-item>
+
                         </a-list>
                     </div>
+                    <!--评论问题-->
                     <div v-if="user!==null">
                         <a-comment>
                             <a-avatar
@@ -82,16 +99,18 @@
                                 alt="Han Solo"/>
                             <div slot="content">
                                 <a-form-item>
-                                    <a-textarea :rows="4" :value="value" @change="handleChange"/>
+                                    <a-textarea style="width: 720px" :rows="4" :value="value" @change="handleChange"/>
                                 </a-form-item>
                                 <a-form-item>
                                     <a-button html-type="submit" :loading="submitting" type="primary"
+                                              style="width: auto"
                                               @click="handleSubmit">
                                         Add Comment
                                     </a-button>
                                 </a-form-item>
                             </div>
                         </a-comment>
+
                     </div>
                     <div v-else style="display: flex;justify-content: center">回复问题请先
                         <router-link to="/login">登录</router-link>
@@ -181,6 +200,9 @@ export default {                                //注入App里的reload方法
         next();
     },
     methods: {
+        secondaryComment(){
+            this.showSecondaryComments = this.showSecondaryComments === false;
+        },
         updateThumbs(comment){
             this.putRequest("/comment/"+comment.id+"?newLikeCount="+comment.likeCount+"&newDislikeCount="+comment.dislikeCount).then(
                 resp=>{
